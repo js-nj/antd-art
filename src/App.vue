@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 	<Login />
-    <Index />
+    <!-- <Index /> -->
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+	font-family: "黑体";
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
