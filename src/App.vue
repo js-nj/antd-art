@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-	<Login />
+	<!-- <Login /> -->
+	<Course />
     <!-- <Index /> -->
   </div>
 </template>
@@ -8,12 +9,14 @@
 <script>
 import Index from './pages/index.vue'
 import Login from './pages/login.vue'
+import Course from './pages/course.vue'
 
 export default {
   name: 'App',
   components: {
     Index,
-	Login
+	Login,
+	Course
   }
 }
 </script>

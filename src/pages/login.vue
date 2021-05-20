@@ -17,7 +17,7 @@
 			<a-form-item>
 				<a-button type="primary" html-type="submit" class="login-form-button">登&nbsp;&nbsp;&nbsp;&nbsp;录</a-button>
 			</a-form-item>
-			<a-form-item style="position: absolute;bottom:0;left: 125px;margin-bottom:0;">
+			<!-- <a-form-item style="position: absolute;bottom:0;left: 125px;margin-bottom:0;">
 				<div>
 					<a-checkbox
 						class="art-agree"
@@ -32,7 +32,7 @@
 						同意《用户服务协议》
 					</a-checkbox>
 				</div>
-			</a-form-item>
+			</a-form-item> -->
 		</a-form>
 	</div>
 </template>
