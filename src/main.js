@@ -12,18 +12,29 @@ Vue.config.productionTip = false
 
 //Axios请求拦截器，随着业务的复杂，Axios层的使用将会越来越复杂，写个精简版的就行了。
 axios.interceptors.request.use(config => {
-    // let token = 'Basic aHRsZjpCanhoNnl6QGZnYnk0c3Q=';
-    // if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-    //     config.headers.Authorization = token;
-    //     console.log('interceptors config=',config)
-    // }
-    return config
+	// debugger
+	if (config.method == 'post') {
+		config.data = {
+			request_content: JSON.stringify(config.data)
+		};
+	} else if (config.method == 'get') {
+		config.params = {
+			request_content: JSON.stringify(config.data)
+		};
+	}
+
+	// let token = 'Basic aHRsZjpCanhoNnl6QGZnYnk0c3Q=';
+	// if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+	//     config.headers.Authorization = token;
+	//     console.log('interceptors config=',config)
+	// }
+	return config
 }, error => {
-    return Promise.reject(error)
+	return Promise.reject(error)
 })
 Vue.prototype.$axios = axios
 
 new Vue({
-  render: h => h(App),
-  router:router
+	render: h => h(App),
+	router: router
 }).$mount('#app')

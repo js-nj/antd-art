@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-	<!-- <Login /> -->
+	<My /><!-- <Login /> -->
 	<Course />
+  
     <!-- <Index /> -->
   </div>
 </template>
@@ -10,13 +11,21 @@
 import Index from './pages/index.vue'
 import Login from './pages/login.vue'
 import Course from './pages/course.vue'
+import My from './pages/my.vue'
+import Order from './pages/order.vue'
+import OrderDetail from './pages/orderDetail.vue'
+import Pay from './pages/pay.vue'
 
 export default {
   name: 'App',
   components: {
     Index,
-	Login,
-	Course
+  	Login,
+  	Course,
+    My,
+    Order,
+    OrderDetail,
+    Pay
   }
 }
 </script>

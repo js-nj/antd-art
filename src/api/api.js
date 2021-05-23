@@ -1,4 +1,9 @@
 let rootPath = 'http://www.zhaolai.net:6012';
-export const url = {
-    ProductDetails:rootPath + '/WebService.asmx/ProductDetails',
+// let rootPath = 'http://api.yuntuyixue.cn';
+export default {
+	ProductDetails: rootPath + '/WebService.asmx/ProductDetails',
+	CommentList: rootPath + '/WebService.asmx/CommentList',
+
+
+	PayList: rootPath + '/WebService.asmx/PayList',
 }
