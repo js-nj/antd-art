@@ -118,7 +118,7 @@ export default {
 	}
 };
 </script>
-<style>
+<style scoped>
 .demo-loadmore-list {
 	padding: 16px 16px;
 	min-height: 350px;
