@@ -18,9 +18,10 @@ axios.interceptors.request.use(config => {
 			request_content: JSON.stringify(config.data)
 		};
 	} else if (config.method == 'get') {
-		config.params = {
-			request_content: JSON.stringify(config.data)
-		};
+		// config.url = config.url+'?request_content='+config.params.request_content
+		// config.params = {
+		// 	request_content: JSON.stringify(config.data)
+		// };
 	}
 
 	// let token = 'Basic aHRsZjpCanhoNnl6QGZnYnk0c3Q=';

@@ -1,8 +1,8 @@
 <template>
 	<div class="my">
 		<div class="my-head" style="">
-			<img style="" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201508%2F15%2F20150815131712_fEyPM.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624360022&t=e4f0414a7f560c0944b20318ee328785" />
-			<span class="name">孙悟空</span>
+			<img style="" :src="user_avatar" />
+			<span class="name">{{user_name}}</span>
 		</div>
 		<div class="my-menus">
 			<div class="my-menu" @click="gotoOrder">
@@ -19,7 +19,8 @@ export default {
 	name:'My',
 	data(){
 		return {
-
+			user_avatar:'',
+			user_name:'',
 		}
 	},
 	methods:{
@@ -30,7 +31,11 @@ export default {
 		}
 	},
 	created(){
-
+		if(localStorage.getItem('userInfo')){
+			window._userInfo = JSON.parse(localStorage.getItem('userInfo'))
+		}
+		this.user_avatar = window._userInfo.user_avatar?window._userInfo.user_avatar:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201604%2F02%2F20160402173031_JYyrn.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624435128&t=1c9dc4d3b231d5b53e3192d277bc7e40";
+		this.user_name = window._userInfo.user_name?window._userInfo.user_name:window._userInfo.user_phone;
 	}
 }
 </script>

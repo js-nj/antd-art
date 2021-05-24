@@ -1,43 +1,40 @@
 <template>
   <div id="app">
-	<My /><!-- <Login /> -->
-	<Course />
-  
-    <!-- <Index /> -->
+	  <router-view keep-alive></router-view>
   </div>
 </template>
 
 <script>
-import Index from './pages/index.vue'
-import Login from './pages/login.vue'
-import Course from './pages/course.vue'
-import My from './pages/my.vue'
-import Order from './pages/order.vue'
-import OrderDetail from './pages/orderDetail.vue'
-import Pay from './pages/pay.vue'
+// import Index from './pages/index.vue'
+// import Login from './pages/login.vue'
+// import Course from './pages/course.vue'
+// import My from './pages/my.vue'
+// import Order from './pages/order.vue'
+// import OrderDetail from './pages/orderDetail.vue'
+// import Pay from './pages/pay.vue'
 
 export default {
   name: 'App',
   components: {
-    Index,
-  	Login,
-  	Course,
-    My,
-    Order,
-    OrderDetail,
-    Pay
+   //  Index,
+  	// Login,
+  	// Course,
+   //  My,
+   //  Order,
+   //  OrderDetail,
+   //  Pay
   }
 }
 </script>
 
 <style>
 #app {
-	font-family: "黑体";
+	font-family: "PingFangSC-Medium";
   /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #333;
   /* margin-top: 60px; */
 }
 </style>

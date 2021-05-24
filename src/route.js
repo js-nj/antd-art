@@ -12,7 +12,7 @@ import Pay from './pages/pay.vue'
 Vue.use(Router)
 
 export const constantRoutes = [{
-  path: '/login',
+  path: '/',
   component: Login
 }, {
   path: '/index',
@@ -31,6 +31,7 @@ export const constantRoutes = [{
   component: OrderDetail
 }, {
   path: '/pay',
+  name:'pay',
   component: Pay
 }]
 
