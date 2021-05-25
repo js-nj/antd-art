@@ -41,7 +41,7 @@
 					<a-col :span="6">支付方式</a-col>
 					<a-col :span="18" style="text-align:left;color:#999;padding-left:8px;">{{ pay_type_name }}</a-col>
 				</a-row>
-				<a-button type="default" shape="round" @click="contectUs" size="small" style="float:right;">联系客服</a-button>
+				<!-- <a-button type="default" shape="round" @click="contectUs" size="small" style="float:right;">联系客服</a-button> -->
 				<!-- <a-row style="margin-bottom:12px;font-size:14px;">
 					<a-col :span="6">支付时间</a-col>
 					<a-col :span="18" style="text-align:left;color:#999;">{{ order_time }}</a-col>
@@ -110,7 +110,7 @@
 	}
 	.ant-list .ant-list-items .ant-list-item {
 		background-color: #fff;
-		padding: 16px 8px;
+		padding: 16px;
 		margin-bottom: 15px;
 		border-bottom: none;
 		display: block;

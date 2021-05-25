@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isLoaded">
+	<div v-if="!isLoaded" style="padding-top: 200px;">
 		<a-spin />
 	</div>
 	<div id="normal-login" v-else>

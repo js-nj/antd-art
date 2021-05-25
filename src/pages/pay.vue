@@ -65,7 +65,7 @@ export default {
 		submitPay() {
 			var that = this;
 			let param = {
-				open_id:'oVLDyjgNiW2l3Cxk_s1wDOPisNnM',
+				open_id:localStorage.open_id,
 				user_id: window._userInfo.id,
 				user_type: '1', //	string	用户类型
 				token: window._userInfo.token, //	string	用户token

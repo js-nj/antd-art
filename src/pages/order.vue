@@ -25,10 +25,10 @@
 				<span>应付款￥</span>
 				<span style="color:#333;">{{ item.products[0].total_price }}</span>
 			</div>
-			<div style="text-align: right;padding-top: 16px;">
+			<!-- <div style="text-align: right;padding-top: 16px;">
 				<a-button v-if="item.order_status == '1'" type="default" shape="round" @click="gotoPay(item)" size="small">支付</a-button>
 				<a-button v-else type="default" shape="round" @click="gotoPay(item)" size="small">再次购买</a-button>
-			</div>
+			</div> -->
 		</a-list-item>
 	</a-list>
 </template>
