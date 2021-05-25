@@ -1,16 +1,19 @@
 <template>
-	<div id="normal-login">
+	<div v-if="!isLoaded">
+		<a-spin />
+	</div>
+	<div id="normal-login" v-else>
 		<div>
 			<h4 class="art-h4">注册/登录您的账户</h4>
 			<h5 class="art-h5">新用户登录后将自动注册创建账号</h5>
 		</div>
 		<a-form :form="form" class="login-form" @submit="handleSubmit">
 			<a-form-item class="userName">
-				<a-input v-decorator="['userName', { rules: [{ required: true, message: '请输入手机号!' }] }]" placeholder="请输入手机号"></a-input>
+				<a-input type="number" v-decorator="['userName', { rules: [{ required: true, message: '请输入手机号!' }] }]" placeholder="请输入手机号"></a-input>
 				<span class="art-86">+86|</span>
 			</a-form-item>
 			<a-form-item>
-				<a-input v-decorator="['password', { rules: [{ required: true, message: '请输入验证码!' }] }]" type="password" placeholder="请输入验证码"></a-input>
+				<a-input :maxLength="maxLength" v-decorator="['password', { rules: [{ required: true, message: '请输入验证码!' }] }]" type="text" placeholder="请输入验证码" ></a-input>
 				<span class="art-code" @click="getCheckCode">{{ checkCodeContent }}</span>
 			</a-form-item>
 			<a-form-item><a-input v-decorator="['recommandcode']" type="text" placeholder="请输入推荐码(选填)"></a-input></a-form-item>
@@ -42,17 +45,55 @@ export default {
 	beforeCreate() {
 		this.form = this.$form.createForm(this, { name: 'normal_login'});
 	},
+	created(){
+		this.GetWxUser();
+	},
 	data() {
 		return {
 			checkCodeContent: '获取验证码',
+			maxLength:4,
 			value:{
 				userName:'',
 				password:'',
 				recommandcode:''
-			}
+			},
+			isLoaded:false
 		};
 	},
 	methods: {
+		GetWxUser() {
+			let tmpCode = window.location.href.split('code=')[1].split('&state=')[0];
+			let param = {
+				code: tmpCode
+			};
+			this.$axios({
+				method: 'post',
+				url: Api.GetWxUser,
+				data: param
+				// data: { request_content: JSON.stringify(param) }
+			})
+				.then(response => {
+					let data = JSON.parse(response.data.d);
+					this.isLoaded = true;
+					if (data.code === '0') {
+						localStorage.userInfo = JSON.stringify(data.list[0]);
+						if (data.list[0].open_id) {
+							localStorage.open_id = data.list[0].open_id;
+						}
+						// if (localStorage.getItem('userInfo')) {
+							window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
+							this.$router.push({
+								path:'/index'
+							});
+						// }
+					} else {
+						localStorage.open_id = data.list[0].open_id;
+					}
+				})
+				.catch(error => {
+					this.$message.error(error);
+				});
+		},
 		handleSubmit(e) {
 			e.preventDefault();
 			this.form.validateFields((err, values) => {
@@ -64,7 +105,7 @@ export default {
 						user_phone: values.userName, //	string	*用户手机号
 						user_type: '1', //	string	*用户类型1学生，0老师
 						sms_code: values.password, //	string	*手机验证码
-						open_id: '' //
+						open_id: localStorage.open_id //
 					};
 					this.$axios({
 						method: 'get',
@@ -178,6 +219,7 @@ export default {
 	line-height: 60px;
 	border-radius: 40px;
 	padding: 4px 22px;
+	font-size: 18px;
 }
 #normal-login .userName .ant-input {
 	padding: 4px 0px 4px 60px;
@@ -186,7 +228,7 @@ export default {
 	position: absolute;
 	top: -12px;
 	left: 12px;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 500;
 }
 .art-code {

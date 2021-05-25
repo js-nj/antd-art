@@ -64,6 +64,9 @@ import Api from '../api/api.js';
 export default {
 	name: 'course',
 	created() {
+		if (localStorage.getItem('userInfo')) {
+			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
+		}
 		let routeParam = this.$route.query;
 		if (routeParam.product_id) {
 			this.product_id = routeParam.product_id;
@@ -95,7 +98,7 @@ export default {
 				query: {
 					name: this.course_name,
 					teacher: this.course_teacher,
-					count: this.course_obj.count,
+					count: this.course_obj.product_count,
 					price: this.course_price,
 					totalprice: this.course_obj.product_total_price,
 					product_id:this.course_obj.product_id
@@ -126,6 +129,7 @@ export default {
 					this.course_syllabus = data.data.product_info;
 					this.course_img = data.data.product_img_url;
 					this.course_video = data.data.product_video_url;
+					this.course_count = data.data.product_count;
 					// this.$message.info('This is a normal message');
 					// localStorage.userInfo = JSON.stringify(data.list[0]);
 				} else {

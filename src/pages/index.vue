@@ -6,11 +6,9 @@
 					<a-icon type="apple" />
 					陪练
 				</span>
-				<div style="height:calc(100vh - 68px);padding: 0px 16px;overflow: auto;">
+				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
 					<a-carousel autoplay>
-						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)">
-							<img style="width: 100%;height:160px;" :src="item.pic_url" />
-						</div>
+						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
 					<div style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;">最新推荐</h5>
@@ -18,10 +16,10 @@
 							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
 								<div class="gutter-box">
 									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
-									<div style="padding: 8px 0;">{{item.product_name}}</div>
+									<div style="padding: 8px 0;">{{ item.product_name }}</div>
 									<div style="overflow: auto;">
-										<span style="color:#BBB;font-size: 10px;">{{item.product_teacher}}</span>
-										<label style="float:right;color:#E96525;">¥{{item.product_price}}/时</label>
+										<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
+										<label style="float:right;color:#E96525;">¥{{ item.product_price }}/时</label>
 									</div>
 								</div>
 							</a-col>
@@ -37,7 +35,7 @@
 					<a-icon type="android" />
 					我的
 				</span>
-				<div style="height:calc(100vh - 45px);">
+				<div :style="{ height: cHeight }">
 					<div class="my-head" style="">
 						<img style="" :src="user_avatar" />
 						<span class="name">{{ user_name }}</span>
@@ -56,28 +54,41 @@
 </template>
 
 <script>
-import Api from '../api/api.js';	
+import Api from '../api/api.js';
 export default {
 	data() {
 		return {
 			tabPosition: 'bottom',
 			user_avatar: '',
 			user_name: '',
-			course_recommend_list:[],
-			ad_list:[]
+			course_recommend_list: [],
+			ad_list: [],
+			cHeight: ''
 		};
 	},
+	created() {
+		this.cHeight = window.innerHeight - 68 + 'px';
+		// debugger
+		if (localStorage.getItem('userInfo')) {
+			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
+			this.user_avatar = window._userInfo.user_avatar ? window._userInfo.user_avatar : require('../assets/head.jpg');
+			this.user_name = window._userInfo.user_name ? window._userInfo.user_name : window._userInfo.user_phone;
+			this.getMainData();
+		} else {
+			alert('个人信息未获取到~');
+		}
+	},
 	methods: {
-		gotoCourse(item){
+		gotoCourse(item) {
 			this.$router.push({
 				path: '/course',
 				query: {
-					product_id: item.product_id,
+					product_id: item.product_id
 				}
 			});
 		},
-		handleAd(item){
-			if(item.web_url){
+		handleAd(item) {
+			if (item.web_url) {
 				window.location.href = item.web_url;
 			}
 		},
@@ -85,7 +96,7 @@ export default {
 			let param = {
 				token: window._userInfo.token,
 				user_id: window._userInfo.id,
-				lesson_type:'2'
+				lesson_type: '2'
 			};
 			this.$axios({
 				method: 'get',
@@ -110,16 +121,6 @@ export default {
 				path: '/order'
 			});
 		}
-	},
-	created() {
-		if (localStorage.getItem('userInfo')) {
-			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
-		}
-		this.user_avatar = window._userInfo.user_avatar
-			? window._userInfo.user_avatar
-			: require('../assets/head.jpg');
-		this.user_name = window._userInfo.user_name ? window._userInfo.user_name : window._userInfo.user_phone;
-		this.getMainData();
 	}
 };
 </script>
@@ -136,17 +137,11 @@ export default {
 .ant-carousel >>> .slick-slide h3 {
 	color: #fff;
 }
-.ant-carousel >>> .ant-tabs-content {
-	height: 100vh;
-}
-.ant-carousel >>> .ant-tabs-nav .ant-tabs-tab::before {
-	/* content:none; */
-}
 .gutter-row {
 	min-height: 180px;
 }
 .gutter-box {
-	width:95%;
+	width: 95%;
 	margin: 0 auto;
 	/* background-color: #666666; */
 }

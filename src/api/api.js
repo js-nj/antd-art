@@ -7,4 +7,5 @@ export default {
 	SMSPost: rootPath + '/WebService.asmx/SMSPost',
 	OrderList: rootPath + '/WebService.asmx/OrderList',
 	StudentIndexGet: rootPath + '/WebService.asmx/StudentIndexGet',
+	GetWxUser: rootPath + '/WebService.asmx/GetWxUser',
 }
