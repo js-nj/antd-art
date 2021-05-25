@@ -76,9 +76,18 @@ export default {
 						if (data.code === '0') {
 							localStorage.userInfo = JSON.stringify(data.data);
 							window._userInfo = data.data;
-							this.$router.push({
-								path:'/my'
-							});
+							if(window.location.href.indexOf('id=')>-1){
+								this.$router.push({
+									path:'/course',
+									query:{
+										product_id: window.location.href.split('id=')[1]
+									}
+								});
+							}else {
+								this.$router.push({
+									path:'/index'
+								});
+							}
 						} else {
 							this.$message.error(data.msg);
 						}

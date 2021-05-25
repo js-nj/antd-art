@@ -41,6 +41,10 @@
 					<h5 class="c-item-subT">课程介绍</h5>
 					<div class="c-item-subB">{{ course_introduction }}</div>
 				</div>
+				<div class="c-item-b">
+					<h5 class="c-item-subT">课程大纲</h5>
+					<div class="c-item-subB">{{ course_introduction }}</div>
+				</div>
 			</div>
 			<!-- <div class="c-item">
 				<h5 class="c-item-h">课程大纲</h5>
@@ -60,6 +64,10 @@ import Api from '../api/api.js';
 export default {
 	name: 'course',
 	created() {
+		let routeParam = this.$route.query;
+		if (routeParam.product_id) {
+			this.product_id = routeParam.product_id;
+		}
 		this.getCourseById();
 	},
 	data() {
@@ -75,7 +83,8 @@ export default {
 			course_teacher_img: '',
 			course_img: '',
 			course_video: '',
-			course_obj: ''
+			course_obj: '',
+			product_id:''
 		};
 	},
 	methods: {
@@ -95,7 +104,7 @@ export default {
 		},
 		getCourseById() {
 			let param = {
-				product_id: '79643d1d60974bd1905a1a35514ac86a',
+				product_id: this.product_id,
 				user_id: ''
 			};
 			this.$axios({
@@ -114,6 +123,7 @@ export default {
 					this.course_teacher = data.data.teacher_name;
 					this.course_teacher_img = data.data.teacher_img_url;
 					this.course_introduction = data.data.product_desc;
+					this.course_syllabus = data.data.product_info;
 					this.course_img = data.data.product_img_url;
 					this.course_video = data.data.product_video_url;
 					// this.$message.info('This is a normal message');

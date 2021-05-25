@@ -4,7 +4,7 @@
 			<a-spin v-if="loadingMore" />
 			<a-button v-else @click="onLoadMore">loading more</a-button>
 		</div>
-		<a-list-item slot="renderItem" slot-scope="item, index">
+		<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoOrderDetail(item)">
 			<div style="overflow: auto;padding: 0 0 8px 0px;text-align: left;border-bottom: solid 1px #ddd;">
 				<span style="font-size: 14px;">订单编号:{{ item.order_num }}</span>
 				<label style="color:#EA8439;font-size: 14px;float:right;">{{ handleOrderStatus(item.order_status) }}</label>
@@ -26,7 +26,7 @@
 				<span style="color:#333;">{{ item.products[0].total_price }}</span>
 			</div>
 			<div style="text-align: right;padding-top: 16px;">
-				<a-button v-if="item.order_status == '1' " type="default" shape="round" @click="gotoPay(item)" size="small">支付</a-button>
+				<a-button v-if="item.order_status == '1'" type="default" shape="round" @click="gotoPay(item)" size="small">支付</a-button>
 				<a-button v-else type="default" shape="round" @click="gotoPay(item)" size="small">再次购买</a-button>
 			</div>
 		</a-list-item>
@@ -112,6 +112,23 @@ export default {
 					price: item.products[0].product_price,
 					totalprice: item.products[0].total_price,
 					product_id:item.products[0].product_id
+				}
+			});
+		},
+		gotoOrderDetail(item){
+			this.$router.push({
+				path: '/orderDetail',
+				query: {
+					order_num:item.order_num,
+					order_time:item.order_time,
+					pay_type_name:item.pay_type_name,
+					name: item.products[0].product_name,
+					teacher: item.products[0].teacher_name,
+					count: item.products[0].product_count,
+					price: item.products[0].product_price,
+					totalprice: item.products[0].total_price,
+					product_id:item.products[0].product_id,
+					product_img_url:item.products[0].product_img_url
 				}
 			});
 		}

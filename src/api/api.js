@@ -6,4 +6,5 @@ export default {
 	UserLogin: rootPath + '/WebService.asmx/UserLogin',
 	SMSPost: rootPath + '/WebService.asmx/SMSPost',
 	OrderList: rootPath + '/WebService.asmx/OrderList',
+	StudentIndexGet: rootPath + '/WebService.asmx/StudentIndexGet',
 }
