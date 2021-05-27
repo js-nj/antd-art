@@ -8,4 +8,5 @@ export default {
 	OrderList: rootPath + '/WebService.asmx/OrderList',
 	StudentIndexGet: rootPath + '/WebService.asmx/StudentIndexGet',
 	GetWxUser: rootPath + '/WebService.asmx/GetWxUser',
+	ProductList: rootPath + '/WebService.asmx/ProductList',
 }

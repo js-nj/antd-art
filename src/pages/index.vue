@@ -1,16 +1,25 @@
 <template>
-	<div>
+	<div v-if="allready">
 		<a-tabs default-active-key="1" tabPosition="bottom" @change="onChange" style="position: absolute;width: 100%;bottom: 0px;">
 			<a-tab-pane key="1">
 				<span slot="tab">
-					<a-icon type="apple" />
-					陪练
+					<!-- <a-icon type="home" /> -->
+					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="plimg" />
+					<span style="font-size: 12px;">陪练</span>
 				</span>
 				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
 					<a-carousel autoplay>
 						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<div style="text-align: left;padding-top: 16px;">
+					<a-row :gutter="0" style="padding-top: 24px;">
+						<a-col class="gutter-row" :span="6" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
+							<div class="gutter-box">
+								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
+								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
+							</div>
+						</a-col>
+					</a-row>
+					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;">最新推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
@@ -32,8 +41,10 @@
 			</a-tab-pane>
 			<a-tab-pane key="2">
 				<span slot="tab">
-					<a-icon type="android" />
-					我的
+					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="wdimg" />
+					<span style="font-size: 12px;">我的</span>
+					<!-- <a-icon type="user" /> -->
+					
 				</span>
 				<div :style="{ height: cHeight }">
 					<div class="my-head" style="">
@@ -63,11 +74,15 @@ export default {
 			user_name: '',
 			course_recommend_list: [],
 			ad_list: [],
-			cHeight: ''
+			cHeight: '',
+			category_list: [],
+			allready:false,
+			plimg:require('../assets/ic_home_selected.png'),
+			wdimg:require('../assets/ic_mine_un_selected.png'),
 		};
 	},
 	created() {
-		this.cHeight = window.innerHeight - 68 + 'px';
+		this.cHeight = window.innerHeight - 52 + 'px';
 		// debugger
 		if (localStorage.getItem('userInfo')) {
 			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -108,17 +123,41 @@ export default {
 				if (data.code === '0') {
 					this.ad_list = data.data.ad_list;
 					this.course_recommend_list = data.data.course_recommend_list;
+					this.category_list = data.data.category_list;
+					this.category_list.length = 7;
+					let allItem = {
+						category_img: require('../assets/all.png'),
+						category_name: '全部',
+						id: ''
+					};
+					this.category_list.push(allItem);
+					this.allready = true;
 				} else {
 					this.$message.error(data.msg);
 				}
 			});
 		},
-		onChange(a, b, c) {
-			console.log(a, b, c);
+		onChange(a) {
+			if(a == 1){
+				this.plimg = require('../assets/ic_home_selected.png');
+				this.wdimg = require('../assets/ic_mine_un_selected.png');
+			}else if(a == 2){
+				this.plimg = require('../assets/ic_home_un_selected.png');
+				this.wdimg = require('../assets/ic_mine_selected.png');
+			}
+			console.log(a);
 		},
 		gotoOrder() {
 			this.$router.push({
 				path: '/order'
+			});
+		},
+		gotoList(item){
+			this.$router.push({
+				path: '/list',
+				query:{
+					category_id:item.id
+				}
 			});
 		}
 	}
@@ -126,6 +165,9 @@ export default {
 </script>
 
 <style scoped>
+.ant-tabs /deep/ .ant-tabs-bottom-bar{
+	margin-top: 0;
+}
 .ant-carousel >>> .slick-slide {
 	text-align: center;
 	height: 160px;
@@ -137,10 +179,10 @@ export default {
 .ant-carousel >>> .slick-slide h3 {
 	color: #fff;
 }
-.gutter-row {
-	min-height: 180px;
+.art-recmmand .gutter-row {
+	min-height: 185px;
 }
-.gutter-box {
+.art-recmmand .gutter-box {
 	width: 95%;
 	margin: 0 auto;
 	/* background-color: #666666; */
@@ -163,7 +205,7 @@ export default {
 .my-head .name {
 	font-size: 16px;
 	position: absolute;
-	top: 48px;
+	top: 60px;
 	left: 122px;
 }
 .my-menus {
@@ -189,5 +231,19 @@ export default {
 	top: 4px;
 	font-size: 12px;
 	color: #999;
+}
+.ant-tabs /deep/ .ant-tabs-ink-bar {
+	display: none !important;
+}
+.ant-tabs /deep/ .ant-tabs-nav {
+	width: 100%;
+}
+.ant-tabs /deep/ .ant-tabs-nav > div {
+	width: 100%;
+}
+.ant-tabs /deep/ .ant-tabs-nav > div .ant-tabs-tab {
+	padding: 4px 0 0 0;
+	width: 50%;
+	margin: 0;
 }
 </style>

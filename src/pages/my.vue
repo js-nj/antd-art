@@ -52,14 +52,14 @@ export default {
 	height:62px;
 	border-radius:64px;
 	display:inline-block;
-	    position: absolute;
+	position: absolute;
     top: 44px;
     left: 34px;
 }
 .my-head .name{
 	font-size: 16px;
     position: absolute;
-    top: 48px;
+    top: 62px;
     left: 122px;
 }
 .my-menus {

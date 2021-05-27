@@ -57,12 +57,17 @@ export default {
 				password:'',
 				recommandcode:''
 			},
-			isLoaded:false
+			isLoaded:false,
+			courseId:''
 		};
 	},
 	methods: {
 		GetWxUser() {
 			let tmpCode = window.location.href.split('code=')[1].split('&state=')[0];
+			let courseStr = window.location.href.split('code=')[1].split('&state=')[1];
+			if(courseStr && courseStr.indexOf('course')>-1){
+				this.courseId = courseStr.split('course')[1].split('#/')[0];
+			}
 			let param = {
 				code: tmpCode
 			};
@@ -82,9 +87,18 @@ export default {
 						}
 						// if (localStorage.getItem('userInfo')) {
 							window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
-							this.$router.push({
-								path:'/index'
-							});
+							if(this.courseId){
+								this.$router.push({
+									path:'/course',
+									query:{
+										product_id: this.courseId
+									}
+								});
+							}else {
+								this.$router.push({
+									path:'/index'
+								});
+							}
 						// }
 					} else {
 						localStorage.open_id = data.list[0].open_id;
@@ -117,11 +131,11 @@ export default {
 						if (data.code === '0') {
 							localStorage.userInfo = JSON.stringify(data.data);
 							window._userInfo = data.data;
-							if(window.location.href.indexOf('id=')>-1){
+							if(this.courseId){
 								this.$router.push({
 									path:'/course',
 									query:{
-										product_id: window.location.href.split('id=')[1]
+										product_id: this.courseId
 									}
 								});
 							}else {
