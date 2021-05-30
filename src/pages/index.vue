@@ -1,5 +1,5 @@
 <template>
-	<div v-if="allready">
+	<div v-if="allready" :style="{paddingTop:paddingTop}">
 		<a-tabs default-active-key="1" tabPosition="bottom" @change="onChange" style="position: absolute;width: 100%;bottom: 0px;">
 			<a-tab-pane key="1">
 				<span slot="tab">
@@ -50,11 +50,22 @@
 					<div class="my-head" style="">
 						<img style="" :src="user_avatar" />
 						<span class="name">{{ user_name }}</span>
+						<br />
+						<span class="money">账户余额:{{ sumMoney }}</span>
 					</div>
 					<div class="my-menus">
 						<div class="my-menu" @click="gotoOrder">
 							<a-icon type="bars" />
 							<span>我的订单</span>
+							<a-icon class="my-arrow-right" type="right" />
+						</div>
+						<div class="my-menu" @click="chongzhi">
+							<a-icon type="bars" />
+							<span>充值</span>
+						</div>
+						<div class="my-menu" @click="gotoMoneyList">
+							<a-icon type="bars" />
+							<span>充值记录</span>
 							<a-icon class="my-arrow-right" type="right" />
 						</div>
 					</div>
@@ -66,7 +77,12 @@
 
 <script>
 import Api from '../api/api.js';
+import { MessageBox } from 'bh-mint-ui2';
+import 'bh-mint-ui2/lib/style.css'
 export default {
+	components:{
+		MessageBox
+	},
 	data() {
 		return {
 			tabPosition: 'bottom',
@@ -77,23 +93,181 @@ export default {
 			cHeight: '',
 			category_list: [],
 			allready:false,
+			paddingTop:'0px',
+			sumMoney:'',
 			plimg:require('../assets/ic_home_selected.png'),
 			wdimg:require('../assets/ic_mine_un_selected.png'),
 		};
 	},
 	created() {
-		this.cHeight = window.innerHeight - 52 + 'px';
+		const isIphonex = () => {
+		 	if (typeof window !== 'undefined' && window) {
+		 		return /iphone/gi.test(window.navigator.userAgent) && window.screen.height >= 812;
+		 	}
+		 	return false;
+		};
+		// debugger
+		if(isIphonex()){
+			this.cHeight = window.innerHeight - 52 + 'px';
+			this.paddingTop = '75px';
+		}else {
+			this.cHeight = window.innerHeight - 52 + 'px';
+		}
 		// debugger
 		if (localStorage.getItem('userInfo')) {
 			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
 			this.user_avatar = window._userInfo.user_avatar ? window._userInfo.user_avatar : require('../assets/head.jpg');
 			this.user_name = window._userInfo.user_name ? window._userInfo.user_name : window._userInfo.user_phone;
+			this.sumMoney = window._userInfo.apple_balance || '0.00';
 			this.getMainData();
 		} else {
 			alert('个人信息未获取到~');
 		}
 	},
 	methods: {
+		chongzhi(){
+			let that = this;
+			MessageBox.prompt('请输入金额', '充值', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          inputPattern: /^\d+(\.\d+)?$/,
+	          inputErrorMessage: '金额格式不正确'
+	        }).then(({ value, action }) => {
+			  let param = {
+	            user_id:window._userInfo.id,// 是 string  用户ID
+	            open_id:localStorage.open_id, //是 string  微信Open_ID
+	            total_fee:value,
+	          };
+	          this.$axios({
+	          	method: 'post',
+				url: Api.WXPay,
+				data:param
+	          }).then(function(response){
+	            let data = JSON.parse(response.data.d);
+	            if (data.code === '0') {
+	              function onBridgeReady() {
+	                WeixinJSBridge.invoke(
+	                  "getBrandWCPayRequest", {
+	                    appId: data.result.appId, //公众号名称，由商户传入
+	                    timeStamp:data.result.timeStamp, //时间戳，自1970年以来的秒数
+	                    nonceStr: data.result.nonceStr, //随机串
+	                    package: data.result.package,
+	                    signType: data.result.signType, //微信签名方式：
+	                    paySign: data.result.paySign //微信签名
+	                  },
+	                  wxResponse => {
+	                    if (wxResponse.err_msg == "get_brand_wcpay_request:ok") {
+	                      alert("支付成功")
+	                      // window.Toast("支付成功");
+	                      that.AppleBalance();
+	                    }
+	                    if (wxResponse.err_msg == "get_brand_wcpay_request:fail") {
+	                      window.Toast("支付失败");
+	                    }
+	                   if (wxResponse.err_msg == "get_brand_wcpay_request:cancel") {
+	                     window.Toast("支付取消");
+	                    }
+	                  }
+	                );
+	              }
+	              if (typeof WeixinJSBridge == "undefined") {
+	                if (document.addEventListener) {
+	                  document.addEventListener(
+	                    "WeixinJSBridgeReady",
+	                    onBridgeReady,
+	                    false
+	                  );
+	                } else if (document.attachEvent) {
+	                  document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+	                  document.attachEvent(
+	                    "onWeixinJSBridgeReady",
+	                    onBridgeReady
+	                  );
+	                }
+	              } else {
+	                onBridgeReady();
+	              }
+	            } else {
+	              // window.Toast(data.msg);
+	              // this.wxBtn=true;
+	            }
+	          });
+			});
+	      // this.$prompt('请输入金额', '充值', {
+	      //     confirmButtonText: '确定',
+	      //     cancelButtonText: '取消',
+	      //     inputPattern: /^\d+(\.\d+)?$/,
+	      //     inputErrorMessage: '金额格式不正确'
+	      //   }).then(({ value }) => {
+	      //     let param = {
+	      //       user_id:window.userInfo.id,// 是 string  用户ID
+	      //       open_id:localStorage.open_id, //是 string  微信Open_ID
+	      //       total_fee:value,
+	      //     };
+	      //     utils.Post('WXPay',param).then(function(response){
+	      //       let data = JSON.parse(response.data.d);
+	      //       if (data.code === '0') {
+	      //         function onBridgeReady() {
+	      //           WeixinJSBridge.invoke(
+	      //             "getBrandWCPayRequest", {
+	      //               appId: data.result.appId, //公众号名称，由商户传入
+	      //               timeStamp:data.result.timeStamp, //时间戳，自1970年以来的秒数
+	      //               nonceStr: data.result.nonceStr, //随机串
+	      //               package: data.result.package,
+	      //               signType: data.result.signType, //微信签名方式：
+	      //               paySign: data.result.paySign //微信签名
+	      //             },
+	      //             wxResponse => {
+	      //               if (wxResponse.err_msg == "get_brand_wcpay_request:ok") {
+	      //                 alert("支付成功")
+	      //                 // window.Toast("支付成功");
+	      //                 that.AppleBalance();
+	      //               }
+	      //               if (wxResponse.err_msg == "get_brand_wcpay_request:fail") {
+	      //                 window.Toast("支付失败");
+	      //               }
+	      //              if (wxResponse.err_msg == "get_brand_wcpay_request:cancel") {
+	      //                window.Toast("支付取消");
+	      //               }
+	      //             }
+	      //           );
+	      //         }
+	      //         if (typeof WeixinJSBridge == "undefined") {
+	      //           if (document.addEventListener) {
+	      //             document.addEventListener(
+	      //               "WeixinJSBridgeReady",
+	      //               onBridgeReady,
+	      //               false
+	      //             );
+	      //           } else if (document.attachEvent) {
+	      //             document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+	      //             document.attachEvent(
+	      //               "onWeixinJSBridgeReady",
+	      //               onBridgeReady
+	      //             );
+	      //           }
+	      //         } else {
+	      //           onBridgeReady();
+	      //         }
+	      //       } else {
+	      //         window.Toast(data.msg);
+	      //         // this.wxBtn=true;
+	      //       }
+	      //     });
+	      //     // this.$message({
+	      //     //   type: 'success',
+	      //     //   message: '你的邮箱是: ' + value
+	      //     // });
+	      //   }).catch(() => {
+	      //     // this.$message({
+	      //     //   type: 'info',
+	      //     //   message: '取消输入'
+	      //     // });
+	      //   });
+		},
+		gotoMoneyList(){
+
+		},
 		gotoCourse(item) {
 			this.$router.push({
 				path: '/course',
@@ -208,9 +382,16 @@ export default {
 	top: 60px;
 	left: 122px;
 }
+.my-head .money {
+	font-size: 16px;
+	position: absolute;
+	top: 90px;
+	left: 122px;
+}
 .my-menus {
 	padding: 48px 24px 16px 24px;
 	text-align: left;
+
 }
 .my-menu {
 	width: 95%;
@@ -219,6 +400,7 @@ export default {
 	overflow: auto;
 	padding-bottom: 8px;
 	border-bottom: solid 1px #eeeeee;
+	margin-bottom: 20px;
 }
 .my-menu span {
 	display: inline-block;
@@ -246,4 +428,8 @@ export default {
 	width: 50%;
 	margin: 0;
 }
+.mint-msgbox-wrapper /deep/ .mint-msgbox {
+	background-color: #fff;
+}
+
 </style>

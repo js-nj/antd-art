@@ -9,4 +9,7 @@ export default {
 	StudentIndexGet: rootPath + '/WebService.asmx/StudentIndexGet',
 	GetWxUser: rootPath + '/WebService.asmx/GetWxUser',
 	ProductList: rootPath + '/WebService.asmx/ProductList',
+	WXPay: rootPath + '/WebService.asmx/WXPay',
+  	PayList:rootPath + '/WebService.asmx/PayList',
+  	AppleBalance:rootPath + '/WebService.asmx/AppleBalance',
 }

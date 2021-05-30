@@ -38,6 +38,9 @@ export default {
   color: #333;
   /* margin-top: 60px; */
 }
+.mt-bg-white {
+  background-color: #fff;
+}
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
     #app {
         padding-bottom: 34px !important;

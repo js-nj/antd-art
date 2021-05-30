@@ -34,7 +34,7 @@ export const constantRoutes = [{
   component: OrderDetail
 }, {
   path: '/pay',
-  name:'pay',
+  name: 'pay',
   component: Pay
 }]
 

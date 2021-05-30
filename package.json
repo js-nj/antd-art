@@ -10,6 +10,7 @@
   "dependencies": {
     "ant-design-vue": "^1.7.5",
     "axios": "^0.21.1",
+    "bh-mint-ui2": "^1.1.45",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1"

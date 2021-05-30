@@ -1,29 +1,36 @@
 <template>
 	<div style="padding: 16px;background: #F7F7F7;">
-		<div>
+		<!-- <div>
 			<span style="color: #999999;font-size:14px;">订单金额</span>
 			<div>
 				<span style="font-size: 18px;">￥</span>
 				<label style="font-size: 36px;">{{ pay_price  }}</label>
 			</div>
-		</div>
+		</div> -->
 		<div style="background: #FFFFFF;border-radius: 4px;margin-top:32px;padding: 16px;">
 			<h5 style="font-size: 20px;text-align: left;">课程信息</h5>
 			<a-row style="margin-bottom:12px;">
-				<a-col :span="6">课程名称</a-col>
+				<a-col :span="6" style="text-align:left;">课程名称</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_name }}</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
-				<a-col :span="6">课程老师</a-col>
+				<a-col :span="6" style="text-align:left;">课程老师</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_teacher }}</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
-				<a-col :span="6">课时数</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_count }}</a-col>
+				<a-col :span="6" style="text-align:left;">课时数</a-col>
+				<!-- <a-col :span="18" style="text-align:right;color:#666666;">{{ course_count }}</a-col> -->
+				<a-col :span="18" style="text-align:right;color:#666666;">
+					<a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="10" @change="onChange" />
+				</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
-				<a-col :span="6">课程单价</a-col>
+				<a-col :span="6" style="text-align:left;">课程单价</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ course_price }}/节</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;">
+				<a-col :span="6" style="text-align:left;">订单金额</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ pay_price }}</a-col>
 			</a-row>
 		</div>
 		<a-button type="primary" shape="round" size="large" style="width: 90%;margin-top:64px;" @click="submitPay">确认订单</a-button>
@@ -62,6 +69,10 @@ export default {
 		};
 	},
 	methods: {
+		onChange(value) {
+			this.pay_price = this.course_price * this.course_count;
+	      // console.log('changed', value);
+	    },
 		submitPay() {
 			var that = this;
 			let param = {
