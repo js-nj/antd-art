@@ -162,10 +162,10 @@ export default {
 	                      that.AppleBalance();
 	                    }
 	                    if (wxResponse.err_msg == "get_brand_wcpay_request:fail") {
-	                      window.Toast("支付失败");
+	                      alert("支付失败");
 	                    }
 	                   if (wxResponse.err_msg == "get_brand_wcpay_request:cancel") {
-	                     window.Toast("支付取消");
+	                     alert("支付取消");
 	                    }
 	                  }
 	                );
@@ -193,80 +193,40 @@ export default {
 	            }
 	          });
 			});
-	      // this.$prompt('请输入金额', '充值', {
-	      //     confirmButtonText: '确定',
-	      //     cancelButtonText: '取消',
-	      //     inputPattern: /^\d+(\.\d+)?$/,
-	      //     inputErrorMessage: '金额格式不正确'
-	      //   }).then(({ value }) => {
-	      //     let param = {
-	      //       user_id:window.userInfo.id,// 是 string  用户ID
-	      //       open_id:localStorage.open_id, //是 string  微信Open_ID
-	      //       total_fee:value,
-	      //     };
-	      //     utils.Post('WXPay',param).then(function(response){
-	      //       let data = JSON.parse(response.data.d);
-	      //       if (data.code === '0') {
-	      //         function onBridgeReady() {
-	      //           WeixinJSBridge.invoke(
-	      //             "getBrandWCPayRequest", {
-	      //               appId: data.result.appId, //公众号名称，由商户传入
-	      //               timeStamp:data.result.timeStamp, //时间戳，自1970年以来的秒数
-	      //               nonceStr: data.result.nonceStr, //随机串
-	      //               package: data.result.package,
-	      //               signType: data.result.signType, //微信签名方式：
-	      //               paySign: data.result.paySign //微信签名
-	      //             },
-	      //             wxResponse => {
-	      //               if (wxResponse.err_msg == "get_brand_wcpay_request:ok") {
-	      //                 alert("支付成功")
-	      //                 // window.Toast("支付成功");
-	      //                 that.AppleBalance();
-	      //               }
-	      //               if (wxResponse.err_msg == "get_brand_wcpay_request:fail") {
-	      //                 window.Toast("支付失败");
-	      //               }
-	      //              if (wxResponse.err_msg == "get_brand_wcpay_request:cancel") {
-	      //                window.Toast("支付取消");
-	      //               }
-	      //             }
-	      //           );
-	      //         }
-	      //         if (typeof WeixinJSBridge == "undefined") {
-	      //           if (document.addEventListener) {
-	      //             document.addEventListener(
-	      //               "WeixinJSBridgeReady",
-	      //               onBridgeReady,
-	      //               false
-	      //             );
-	      //           } else if (document.attachEvent) {
-	      //             document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
-	      //             document.attachEvent(
-	      //               "onWeixinJSBridgeReady",
-	      //               onBridgeReady
-	      //             );
-	      //           }
-	      //         } else {
-	      //           onBridgeReady();
-	      //         }
-	      //       } else {
-	      //         window.Toast(data.msg);
-	      //         // this.wxBtn=true;
-	      //       }
-	      //     });
-	      //     // this.$message({
-	      //     //   type: 'success',
-	      //     //   message: '你的邮箱是: ' + value
-	      //     // });
-	      //   }).catch(() => {
-	      //     // this.$message({
-	      //     //   type: 'info',
-	      //     //   message: '取消输入'
-	      //     // });
-	      //   });
 		},
+		AppleBalance(){
+	      var that = this;
+	      let param =  {
+	        token:window._userInfo.token,
+	        user_type:'',
+	        user_id:window._userInfo.id
+	      };
+	      this.$axios({
+	          	method: 'get',
+				url: Api.AppleBalance,
+				params:{ request_content: JSON.stringify(param) }
+	          }).then((response) => {
+	        let data = response.data;
+	        if (data.code === '0') {
+	          that.sumMoney = data.data;
+	          window._userInfo.apple_balance = data.data;
+	          localStorage.userInfo = JSON.stringify(window.userInfo);
+	        } else {
+	        	this.$message.error(data.msg);
+	          // Toast(data.msg);
+	        }
+	      }).catch((error) => {
+	      	this.$message.error('获取余额失败！');
+	        // Toast('获取余额失败！');
+	      })
+	    },
 		gotoMoneyList(){
-
+			this.$router.push({
+				path: '/consumelist',
+				query: {
+					
+				}
+			});
 		},
 		gotoCourse(item) {
 			this.$router.push({

@@ -4,18 +4,13 @@
 			<a-spin v-if="loadingMore" />
 			<a-button v-if="!loadingMore && !allLoaded" @click="onLoadMore">加载更多</a-button>
 		</div>
-		<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoCourse(item)">
+		<a-list-item slot="renderItem" slot-scope="item, index" >
 			<a-list-item-meta>
-				<a class="art-item-name" slot="title" style="">{{ item.product_name }}</a>
+				<a class="art-item-name" slot="title" style="">充值金额：{{item.pay_amount}}</a>
 				<div slot="description" style="text-align: left;">
-					{{ item.teacher_name ? item.teacher_name : '  ' }}
-					<br />
-					<div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
-						<span>已经有{{item.visit_count}}人学习</span>
-						<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}</i>
-					</div>
+					充值时间：{{item.pay_time}}
 				</div>
-				<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.product_img_url" />
+				<a-avatar shape="square" :size="72" style="height:72px;" slot="avatar" :src="img" />
 			</a-list-item-meta>
 		</a-list-item>
 	</a-list>
@@ -32,7 +27,8 @@ export default {
 			data: [],
 			page: 1,
 			category_id:'',
-			allLoaded:false
+			allLoaded:false,
+			img:require('../assets/logo2.png'),
 		};
 	},
 	mounted() {
@@ -69,32 +65,40 @@ export default {
 			}
 		},
 		getData(callback) {
-			let param = {
-				page: this.page, //	int	*当前页数
-				limit: 10, //	int	*页面大小
-				token: window._userInfo.token, //	*用户token
-				user_id: window._userInfo.id, //	string	*用户ID
-				user_type:'0',//	string	*1学生，0老师
-				category_id:this.category_id,//	string	类别ID
-				course_level:'',//	string	课程难度，1-5级，入门，初级，中级，高级，特级
-				// order_type:'1',//	string	排序类型，1综合2销售3上新4好评5价格高到低6价格低到高
-				teacher_id:'',//	string	教师ID
-				keywords:'',//	string	商品名称搜素关键词
-				product_status:'',//
-			};
-			this.$axios({
-				method: 'get',
-				url: Api.ProductList,
-				params: { request_content: JSON.stringify(param) }
-			}).then(res => {
-				let data = res.data;
-				console.log('data', data);
-				if (data.code === '0') {
-					callback(data);
-				} else {
-					this.$message.error(data.msg);
-				}
-			});
+			var that = this;
+		      var tmpParam = {
+		        page:this.page,//  int *当前页数
+		        limit:10,// int *页面大小
+		        user_id:window._userInfo.id
+		      };
+		      	this.$axios({
+					method: 'get',
+					url: Api.PayList,
+					params: { request_content: JSON.stringify(tmpParam) }
+				}).then((response) => {
+		          let data = response.data;
+		          if (data.code === '0') {
+		            callback(data);
+		          } else {
+		            this.$message.error(data.msg);
+		          }
+		        }).catch((error) => {
+		          this.$message.error(error);
+		        })
+
+			// this.$axios({
+			// 	method: 'get',
+			// 	url: Api.ProductList,
+			// 	params: { request_content: JSON.stringify(param) }
+			// }).then(res => {
+			// 	let data = res.data;
+			// 	console.log('data', data);
+			// 	if (data.code === '0') {
+			// 		callback(data);
+			// 	} else {
+			// 		this.$message.error(data.msg);
+			// 	}
+			// });
 		},
 		onLoadMore() {
 			this.loadingMore = true;
