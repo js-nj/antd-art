@@ -108,8 +108,9 @@ export default {
 		};
 		// debugger
 		if(isIphonex()){
-			this.cHeight = window.innerHeight - 52 + 'px';
-			this.paddingTop = '75px';
+			// alert('isIphonex');
+			this.cHeight = window.innerHeight - 52 - 75 + 'px';
+			// this.paddingTop = '75px';
 		}else {
 			this.cHeight = window.innerHeight - 52 + 'px';
 		}
