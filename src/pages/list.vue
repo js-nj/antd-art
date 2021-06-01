@@ -1,24 +1,29 @@
 <template>
-	<a-list class="demo-loadmore-list" :loading="loading" item-layout="horizontal" :data-source="data">
-		<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
-			<a-spin v-if="loadingMore" />
-			<a-button v-if="!loadingMore && !allLoaded" @click="onLoadMore">加载更多</a-button>
-		</div>
-		<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoCourse(item)">
-			<a-list-item-meta>
-				<a class="art-item-name" slot="title" style="">{{ item.product_name }}</a>
-				<div slot="description" style="text-align: left;">
-					{{ item.teacher_name ? item.teacher_name : '  ' }}
-					<br />
-					<div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
-						<span>已经有{{item.visit_count}}人学习</span>
-						<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}</i>
+	<div>
+		<a-list class="demo-loadmore-list" :loading="loading" item-layout="horizontal" :data-source="data">
+			<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
+				<a-spin v-if="loadingMore" />
+				<a-button v-if="!loadingMore && !allLoaded" @click="onLoadMore">加载更多</a-button>
+			</div>
+			<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoCourse(item)">
+				<a-list-item-meta>
+					<a class="art-item-name" slot="title" style="">{{ item.product_name }}</a>
+					<div slot="description" style="text-align: left;">
+						{{ item.teacher_name ? item.teacher_name : '  ' }}
+						<br />
+						<div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
+							<span>已经有{{item.visit_count}}人学习</span>
+							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}</i>
+						</div>
 					</div>
-				</div>
-				<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.product_img_url" />
-			</a-list-item-meta>
-		</a-list-item>
-	</a-list>
+					<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.product_img_url" />
+				</a-list-item-meta>
+			</a-list-item>
+		</a-list>
+		<!-- <div style="position: fixed;bottom: 20px;right:20px;background-color: #fff;border-radius: 20px;">
+			<a-button @click="gotoIndex" >首页</a-button>
+		</div> -->
+	</div>
 </template>
 <script>
 import Api from '../api/api.js';
@@ -55,6 +60,14 @@ export default {
 		});
 	},
 	methods: {
+		gotoIndex(){
+			this.$router.push({
+				path: '/index',
+				query: {
+					
+				}
+			});
+		},
 		handleOrderStatus(val) {
 			// 1待付款，2已付款，3已取消
 			switch (val) {

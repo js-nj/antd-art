@@ -101,7 +101,8 @@ export default {
 					count: this.course_obj.product_count,
 					price: this.course_price,
 					totalprice: this.course_obj.product_total_price,
-					product_id:this.course_obj.product_id
+					product_id:this.course_obj.product_id,
+					teacher_id:this.course_obj.teacher_id
 				}
 			});
 		},

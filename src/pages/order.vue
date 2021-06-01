@@ -3,6 +3,7 @@
 		<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
 			<a-spin v-if="loadingMore" />
 			<a-button v-else @click="onLoadMore">加载更多</a-button>
+			<a-button @click="gotoIndex" style="margin-left: 8px;">首页</a-button>
 		</div>
 		<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoOrderDetail(item)">
 			<div style="overflow: auto;padding: 0 0 8px 0px;text-align: left;border-bottom: solid 1px #ddd;">
@@ -57,6 +58,14 @@ export default {
 		});
 	},
 	methods: {
+		gotoIndex(){
+			this.$router.push({
+				path: '/index',
+				query: {
+					
+				}
+			});
+		},
 		handleOrderStatus(val) {
 			// 1待付款，2已付款，3已取消
 			switch (val) {

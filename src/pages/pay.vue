@@ -21,7 +21,7 @@
 				<a-col :span="6" style="text-align:left;">课时数</a-col>
 				<!-- <a-col :span="18" style="text-align:right;color:#666666;">{{ course_count }}</a-col> -->
 				<a-col :span="18" style="text-align:right;color:#666666;">
-					<a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="10" @change="onChange" />
+					<a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="1" @change="onChange" />
 				</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
@@ -55,6 +55,7 @@ export default {
 			// this.course_totalprice = routeParam.totalprice;
 			this.course_id = routeParam.product_id;
 			this.order_num = routeParam.order_num;
+			this.teacher_id = routeParam.teacher_id;
 		}
 	},
 	data() {
@@ -65,6 +66,7 @@ export default {
 			course_count: '',
 			course_price: '',
 			course_id: '',
+			teacher_id:'',
 			order_num:''
 		};
 	},
@@ -80,7 +82,7 @@ export default {
 				user_id: window._userInfo.id,
 				user_type: '1', //	string	用户类型
 				token: window._userInfo.token, //	string	用户token
-				teacher_id: '', //	string	教师ID
+				teacher_id: this.teacher_id, //	string	教师ID
 				pay_type: '1', //	string	1微信2支付宝
 				order_money: this.pay_price, //	number	订单金额
 				order_remarks: '', //	string	订单备注
