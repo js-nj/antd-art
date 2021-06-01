@@ -14,7 +14,7 @@
 								{{course_teacher}}
 								<br />
 								<div style="color:#333;overflow: auto;">
-									￥{{course_price}}
+									￥{{course_price}}/节
 									<i style="font-style: normal;float:right;">×{{course_count}}</i>
 								</div>
 							</div>

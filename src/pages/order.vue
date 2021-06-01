@@ -1,29 +1,29 @@
 <template>
+	<div>
 	<a-list class="demo-loadmore-list" :loading="loading" item-layout="horizontal" :data-source="data">
 		<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
 			<a-spin v-if="loadingMore" />
 			<a-button v-else @click="onLoadMore">加载更多</a-button>
-			<a-button @click="gotoIndex" style="margin-left: 8px;">首页</a-button>
 		</div>
 		<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoOrderDetail(item)">
 			<div style="overflow: auto;padding: 0 0 8px 0px;text-align: left;border-bottom: solid 1px #ddd;">
 				<span style="font-size: 14px;">订单编号:{{ item.order_num }}</span>
-				<label style="color:#EA8439;font-size: 14px;float:right;">{{ handleOrderStatus(item.order_status) }}</label>
+				<label style="color:#EA8439;font-size: 14px;float:right;">{{ item.order_status_name}}</label>
 			</div>
 			<a-list-item-meta>
 				<a slot="title" style="color:#333;">{{ item.products[0].product_name }}</a>
 				<div slot="description" style="text-align: left;">
-					{{ item.products[0].teacher_name ? item.products[0].teacher_name : 'xxx' }}
+					{{ item.products[0].teacher_name ? item.products[0].teacher_name : '' }}
 					<br />
 					<div style="color:#333;overflow: auto;">
-						￥{{ item.products[0].total_price }}
+						￥{{ item.products[0].product_price }}
 						<i style="font-style: normal;float:right;">×{{ item.products[0].product_count }}</i>
 					</div>
 				</div>
 				<a-avatar shape="square" :size="100" style="height:60px;" slot="avatar" :src="item.products[0].product_img_url" />
 			</a-list-item-meta>
 			<div style="text-align: right;">
-				<span>应付款￥</span>
+				<span>总额￥</span>
 				<span style="color:#333;">{{ item.products[0].total_price }}</span>
 			</div>
 			<!-- <div style="text-align: right;padding-top: 16px;">
@@ -32,6 +32,8 @@
 			</div> -->
 		</a-list-item>
 	</a-list>
+	<div @click="gotoIndex" style="display: inline-block;padding: 4px;position: fixed;bottom:30px;right:30px;background: #333;color: #fff;border-radius: 4px;">返回首页</div>
+	</div>
 </template>
 <script>
 import Api from '../api/api.js';

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-	  <router-view keep-alive></router-view>
+	  <router-view ></router-view>
   </div>
 </template>
 
@@ -40,10 +40,5 @@ export default {
 }
 .mt-bg-white {
   background-color: #fff;
-}
-@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-    #app {
-        padding-bottom: 34px !important;
-    }
 }
 </style>

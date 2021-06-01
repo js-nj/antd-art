@@ -8,7 +8,7 @@
 			</div>
 		</div> -->
 		<div style="background: #FFFFFF;border-radius: 4px;margin-top:32px;padding: 16px;">
-			<h5 style="font-size: 20px;text-align: left;">课程信息</h5>
+			<h5 style="font-size: 20px;text-align: left;padding: 8px 0;">课程信息</h5>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">课程名称</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_name }}</a-col>
@@ -21,7 +21,8 @@
 				<a-col :span="6" style="text-align:left;">课时数</a-col>
 				<!-- <a-col :span="18" style="text-align:right;color:#666666;">{{ course_count }}</a-col> -->
 				<a-col :span="18" style="text-align:right;color:#666666;">
-					<a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="1" @change="onChange" />
+					<van-stepper v-model="course_count" min="1" max="99" step="1" :default-value="1" @change="onChange"/>
+					<!-- <a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="1" @change="onChange" /> -->
 				</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
@@ -30,7 +31,7 @@
 			</a-row>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">订单金额</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ pay_price }}</a-col>
+				<a-col :span="18" style="text-align:right;font-size: 18px;color: red;">￥{{ pay_price }}</a-col>
 			</a-row>
 		</div>
 		<a-button type="primary" shape="round" size="large" style="width: 90%;margin-top:64px;" @click="submitPay">确认订单</a-button>
@@ -47,15 +48,20 @@ export default {
 		}
 		let routeParam = this.$route.query;
 		if (routeParam.name) {
-			this.pay_price = routeParam.totalprice || routeParam.price;
+			// this.pay_price = routeParam.totalprice || routeParam.price;
 			this.course_name = routeParam.name;
 			this.course_teacher = routeParam.teacher;
-			this.course_count = routeParam.count;
+			if(routeParam.count === '0' || !routeParam.count){
+				this.course_count = 1;
+			}else {
+				this.course_count = routeParam.count;
+			}
 			this.course_price = routeParam.price;
 			// this.course_totalprice = routeParam.totalprice;
 			this.course_id = routeParam.product_id;
 			this.order_num = routeParam.order_num;
 			this.teacher_id = routeParam.teacher_id;
+			this.pay_price = routeParam.price * this.course_count;
 		}
 	},
 	data() {
@@ -71,9 +77,8 @@ export default {
 		};
 	},
 	methods: {
-		onChange(value) {
-			this.pay_price = this.course_price * this.course_count;
-	      // console.log('changed', value);
+		onChange() {
+			this.pay_price = (this.course_price * this.course_count).toFixed(2);
 	    },
 		submitPay() {
 			var that = this;

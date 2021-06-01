@@ -12,10 +12,9 @@
 					<h5 class="c-item-subT">{{ course_name }}</h5>
 					<div class="c-item-subB">
 						<span>{{ course_personNum }}人参加</span>
-						<label>
-							￥
+						<label>￥
 							<i>{{ course_price }}</i>
-							/时
+							/节
 						</label>
 					</div>
 				</div>

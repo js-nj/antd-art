@@ -13,7 +13,7 @@
 						<br />
 						<div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
 							<span>已经有{{item.visit_count}}人学习</span>
-							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}</i>
+							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}/节</i>
 						</div>
 					</div>
 					<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.product_img_url" />
@@ -154,7 +154,7 @@ export default {
 		  -webkit-line-clamp: 2;
 		  line-clamp: 2;
 		  -webkit-box-orient: vertical;
-		  color:#333;height: 40px;
+		  color:#333;height: 34px;
 	}
 .demo-loadmore-list {
 	padding: 16px 16px;
