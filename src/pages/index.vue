@@ -111,7 +111,7 @@ export default {
 			this.cHeight = localStorage.innerHeight - 52 + 'px';
 			// alert('this.cHeight', this.cHeight);
 		}
-		// alert(this.cHeight + '--' + window.innerHeight)
+		console.log('this.cHeight:'+this.cHeight + ',localStorage.innerHeight:'+localStorage.innerHeight + ',window.innerHeight:' + window.innerHeight+',window.outerHeight:'+window.outerHeight)
 		// debugger
 		if (localStorage.getItem('userInfo')) {
 			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
