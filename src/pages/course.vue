@@ -24,7 +24,7 @@
 						<a-tag color="blue" v-for="item in course_tags" :key="item.id">{{ item.tag_name }}</a-tag>
 					</div>
 				</div>
-				<div class="c-item-b">
+				<div class="c-item-b" @click="gotoTeacher(teacher_id)">
 					<h5 class="c-item-subT">老师</h5>
 					<div class="c-item-subB">
 						<div style="background: #F7F7F7;border-radius: 8px;width:200px;padding:12px;">
@@ -54,7 +54,15 @@
 				<div class="c-item-b">{{course_evaluation}}</div>
 			</div> -->
 		</div>
-		<div class="course-button"><a-button type="primary" html-type="submit" class="login-form-button" @click="gotoPay">立即报名</a-button></div>
+		<div class="course-button">
+			<div style="display:inline-block;width: 48px;height:50px;">
+				<div style="position: relative;left: 0px;top: 8px;line-height: 12px;" @click="gotoJigou()">
+					<img :src="jigou" style="width:20px;height:20px;" />
+					<div style="font-size:12px;line-height:12px;">机构</div>
+				</div>
+			</div>
+			<a-button type="primary" html-type="submit" class="login-form-button" @click="gotoPay">立即报名</a-button>
+		</div>
 	</div>
 </template>
 
@@ -82,14 +90,33 @@ export default {
 			course_price: '',
 			course_tags: [],
 			course_teacher: '',
+			teacher_id:'',
 			course_teacher_img: '',
 			course_img: '',
 			course_video: '',
+			office_id:'',
 			course_obj: '',
-			product_id:''
+			product_id:'',
+			jigou:require('../assets/jigou.png')
 		};
 	},
 	methods: {
+		gotoTeacher(){
+			this.$router.push({
+				path: '/teacher',
+				query: {
+					id: this.teacher_id
+				}
+			});
+		},
+		gotoJigou(){
+			this.$router.push({
+				path: '/organization',
+				query: {
+					id: this.office_id
+				}
+			});
+		},
 		gotoPay() {
 			// debugger
 			this.$router.push({
@@ -124,12 +151,14 @@ export default {
 					this.course_personNum = data.data.student_count || 0;
 					this.course_tags = data.data.product_tags;
 					this.course_teacher = data.data.teacher_name;
+					this.teacher_id = data.data.teacher_id;
 					this.course_teacher_img = data.data.teacher_img_url;
 					this.course_introduction = data.data.product_desc;
 					this.course_syllabus = data.data.product_info;
 					this.course_img = data.data.product_img_url;
 					this.course_video = data.data.product_video_url;
 					this.course_count = data.data.product_count;
+					this.office_id = data.data.office_id;
 					// this.$message.info('This is a normal message');
 					// localStorage.userInfo = JSON.stringify(data.list[0]);
 				} else {

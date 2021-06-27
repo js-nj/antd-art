@@ -5,9 +5,12 @@ import 'ant-design-vue/dist/antd.css';
 import VueRouter from 'vue-router'
 import router from './route.js'
 import axios from 'axios'
-import { Stepper } from 'vant';
+import {
+	Stepper
+} from 'vant';
 Vue.use(Stepper);
 import 'vant/lib/stepper/style';
+// import 'vant/lib/icon/local.css';
 // import ref from 'vue-ref';
 // Vue.use(ref, { name: 'ant-ref' });
 

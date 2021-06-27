@@ -12,4 +12,8 @@ export default {
 	WXPay: rootPath + '/WebService.asmx/WXPay',
 	PayList: rootPath + '/WebService.asmx/PayList',
 	AppleBalance: rootPath + '/WebService.asmx/AppleBalance',
+
+	OfficeDetails: rootPath + '/WebService.asmx/OfficeDetails',
+	TeacherList: rootPath + '/WebService.asmx/TeacherList',
+	TeacherDetails: rootPath + '/WebService.asmx/TeacherDetails',
 }

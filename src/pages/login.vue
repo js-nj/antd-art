@@ -58,16 +58,26 @@ export default {
 				recommandcode:''
 			},
 			isLoaded:false,
-			courseId:''
+			courseId:'',
+			office_id:''
 		};
 	},
 	methods: {
 		GetWxUser() {
 			let tmpCode = window.location.href.split('code=')[1].split('&state=')[0];
 			let courseStr = window.location.href.split('code=')[1].split('&state=')[1];
+			// let office_id = '';
 			if(courseStr && courseStr.indexOf('course')>-1){
-				this.courseId = courseStr.split('course')[1].split('#/')[0];
+				if(courseStr && courseStr.indexOf('office_id')>-1){
+					this.courseId = courseStr.split('course')[1].split('office_id')[0];
+					this.office_id = courseStr.split('course')[1].split('office_id')[1].split('#/')[0];
+				}else {
+					this.courseId = courseStr.split('course')[1].split('#/')[0];
+				}
+			}else if(courseStr && courseStr.indexOf('office_id')>-1){
+				this.office_id = courseStr.split('office_id')[1].split('#/')[0];
 			}
+
 			let param = {
 				code: tmpCode
 			};

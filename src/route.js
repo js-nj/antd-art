@@ -9,7 +9,8 @@ import Order from './pages/order.vue'
 import OrderDetail from './pages/orderDetail.vue'
 import Pay from './pages/pay.vue'
 import consumelist from './pages/consumelist.vue'
-
+import organization from './pages/organization.vue'
+import teacher from './pages/teacher.vue'
 Vue.use(Router)
 
 export const constantRoutes = [{
@@ -41,6 +42,14 @@ export const constantRoutes = [{
   path: '/consumelist',
   name: 'consumelist',
   component: consumelist
+}, {
+  path: '/organization',
+  name: 'organization',
+  component: organization
+}, {
+  path: '/teacher',
+  name: 'teacher',
+  component: teacher
 }]
 
 export default new Router({
