@@ -19,7 +19,7 @@
 						</a-col>
 					</a-row>
 					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
-						<h5 style="color:#333;font-size: 16px;">最新推荐</h5>
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">最新推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
 								<div class="gutter-box">
@@ -28,6 +28,20 @@
 									<div style="overflow: auto;">
 										<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
 										<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+									</div>
+								</div>
+							</a-col>
+						</a-row>
+					</div>
+					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">推荐机构</h5>
+						<a-row :gutter="0">
+							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
+								<div>
+									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: text-bottom;">
+									<div style="padding-left:20px;display:inline-block;width: 216px;text-align: left;">
+										<div>{{item.office_name}}</div>
+										<div class="van-multi-ellipsis--l2">{{item.office_info}}</div>
 									</div>
 								</div>
 							</a-col>
@@ -83,6 +97,7 @@ export default {
 			user_avatar: '',
 			user_name: '',
 			course_recommend_list: [],
+			org_recommend_list:[],
 			ad_list: [],
 			cHeight: '',
 			category_list: [],
@@ -124,6 +139,14 @@ export default {
 		}
 	},
 	methods: {
+		gotoOrg(item){
+			this.$router.push({
+				path: '/organization',
+				query: {
+					id:item.office_id
+				}
+			});
+		},
 		chongzhi() {
 			let that = this;
 			MessageBox.prompt('请输入金额', '充值', {
@@ -250,6 +273,7 @@ export default {
 				if (data.code === '0') {
 					this.ad_list = data.data.ad_list;
 					this.course_recommend_list = data.data.course_recommend_list;
+					this.org_recommend_list = data.data.company_recommend_list
 					this.category_list = data.data.category_list;
 					this.category_list.length = 7;
 					let allItem = {

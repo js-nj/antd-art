@@ -9,9 +9,9 @@
 				</div>
 			</div>
 			<van-row style="padding-top: 12px;">
-			  <van-col span="8">好评度: {{this.rate}}</van-col>
-			  <van-col span="8">课程数: {{this.course}}</van-col>
-			  <van-col span="8">学生数: {{this.students}}</van-col>
+			  <van-col span="8">好评度：{{this.rate}}%</van-col>
+			  <van-col span="8">课程数：{{this.course}}</van-col>
+			  <van-col span="8">学生数：{{this.students}}</van-col>
 			</van-row>
 		</div>
 		<van-tabs v-model="active">
@@ -20,7 +20,7 @@
 		  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">品牌介绍</div>
 		  		<div style="padding-top: 12px;">
 					<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: text-bottom;">
-					<div style="padding-left:20px;display:inline-block;width: 216px;text-align: left;">
+					<div style="padding-left:20px;display:inline-block;width: 270px;text-align: left;">
 						<div class="van-multi-ellipsis--l3">{{this.des}}</div>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 		  	<div style="margin-top: 12px;">
 		  		<div v-for="item in teacher_list" style="border-bottom: 1px solid #EEEEEE;background:#fff;padding:12px 6px;">
 					<img :src="item.user_avatar" style="width:44px;height:44px;display:inline-block;border-radius:22px;vertical-align:top;">
-					<div style="padding-left:20px;display:inline-block;width:150px;text-align:left;height:44px;line-height:44px;">
+					<div style="padding-left:20px;display:inline-block;width:200px;text-align:left;height:44px;line-height:44px;">
 						<div style="font-size:16px;line-height:22px;">{{item.user_name}}</div>
 						<div style="font-size:14px;color:#999;line-height:22px;">{{item.user_info}}</div>
 					</div>

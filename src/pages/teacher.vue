@@ -254,7 +254,7 @@ export default {
 				this.office_img =  data.data.office_img;
 				this.office_name =  data.data.office_name;
 				this.office_info = data.data.office_info;
-				this.teacher_top_img = data.data.teacher_top_img;
+				this.teacher_top_img = data.data.teacher_top_img?data.data.teacher_top_img:require('../assets/teacher_bg.png')
 	          } else {
 	            this.$message.error(data.msg);
 	          }
