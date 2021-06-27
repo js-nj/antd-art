@@ -38,10 +38,10 @@
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
 								<div>
-									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: text-bottom;">
-									<div style="padding-left:20px;display:inline-block;width: 216px;text-align: left;">
+									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
+									<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
 										<div>{{item.office_name}}</div>
-										<div class="van-multi-ellipsis--l2">{{item.office_info}}</div>
+										<div class="van-multi-ellipsis--l2" style="color: #999;">{{item.office_info}}</div>
 									</div>
 								</div>
 							</a-col>
@@ -332,6 +332,9 @@ export default {
 }
 .art-recmmand .gutter-row {
 	min-height: 185px;
+}
+.art-recmmand-org .gutter-row {
+	max-height: 100px;
 }
 .art-recmmand .gutter-box {
 	width: 95%;
