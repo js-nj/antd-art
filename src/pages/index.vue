@@ -34,7 +34,7 @@
 						</a-row>
 					</div>
 					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
-						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">推荐机构</h5>
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
 								<div>
@@ -118,12 +118,12 @@ export default {
 		// debugger
 		if (isIphonex()) {
 			// alert('isIphonex');
-			this.cHeight = localStorage.innerHeight - 52 - 75 + 'px';
+			this.cHeight = sessionStorage.innerHeight - 52 - 75 + 'px';
 			// alert('this.cHeight', this.cHeight);
 			// this.paddingTop = '75px';
 		} else {
 			// debugger
-			this.cHeight = localStorage.innerHeight - 52 + 'px';
+			this.cHeight = sessionStorage.innerHeight - 52 + 'px';
 			// alert('this.cHeight', this.cHeight);
 		}
 		console.log('this.cHeight:'+this.cHeight + ',localStorage.innerHeight:'+localStorage.innerHeight + ',window.innerHeight:' + window.innerHeight+',window.outerHeight:'+window.outerHeight)
