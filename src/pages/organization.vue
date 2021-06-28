@@ -26,12 +26,27 @@
 				</div>
 		  	</div>
 		  </van-tab>
-		  <van-tab title="课程">
-		  	<a-row :gutter="8" style="margin-top: 12px;padding: 0px 8px;background: #fff;">
+		  <van-tab title="主课">
+		  	<a-row :gutter="0" style="margin-top: 12px;padding: 0px 8px;background: #fff;">
 				<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in course_list" :key="item.id" @click="gotoCourse(item)">
 					<div class="gutter-box">
-						<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
-						<div style="padding: 8px 0;">{{ item.product_name }}</div>
+						<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
+						<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
+						<div style="overflow: auto;text-align: left;">
+							<!-- <van-tag type="primary" plain style="padding:0 4px;position: relative;left: 12px;top: -1px;">{{item.lesson_type== '1'?'主课':'陪练'}}</van-tag> -->
+							<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
+							<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+						</div>
+					</div>
+				</a-col>
+			</a-row>
+		  </van-tab>
+		  <van-tab title="陪练">
+		  	<a-row :gutter="0" style="margin-top: 12px;padding: 0px 8px;background: #fff;">
+				<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in sparecourse_list" :key="item.id" @click="gotoCourse(item)">
+					<div class="gutter-box">
+						<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
+						<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
 						<div style="overflow: auto;text-align: left;">
 							<!-- <van-tag type="primary" plain style="padding:0 4px;position: relative;left: 12px;top: -1px;">{{item.lesson_type== '1'?'主课':'陪练'}}</van-tag> -->
 							<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
@@ -86,6 +101,7 @@ export default {
 			students:'',
 			active:0,
 			course_list:[],
+			sparecourse_list:[],
 			teacher_list:[],
 			office_id:''
 		}
@@ -155,7 +171,7 @@ export default {
 		getOrgCourse(){
 			var tmpParam = {
 				page:'1',
-				limit:'50',
+				limit:'100',
 		        office_id:this.office_id
 		    };
 	      	this.$axios({
@@ -165,7 +181,16 @@ export default {
 			}).then((response) => {
 	          let data = response.data;
 	          if (data.code === '0') {
-	          	this.course_list = data.data;
+				  this.course_list = [];
+				  this.sparecourse_list = [];
+				  data.data.forEach(sub=>{
+					  if(sub.lesson_type == '1'){
+						this.course_list.push(sub);  
+					  }else {
+						this.sparecourse_list.push(sub);  
+					  }
+				  });
+	          	// this.course_list = data.data;
 	          } else {
 	            this.$message.error(data.msg);
 	          }
