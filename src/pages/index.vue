@@ -3,8 +3,8 @@
 		<a-tabs default-active-key="1" tabPosition="bottom" @change="onChange" style="width: 100%;bottom: 0px;">
 			<a-tab-pane key="1">
 				<span slot="tab">
-					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="plimg" />
-					<span style="font-size: 12px;">陪练</span>
+					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="indeximg" />
+					<span style="font-size: 12px;">主页</span>
 				</span>
 				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
 					<a-carousel autoplay>
@@ -51,6 +51,54 @@
 			</a-tab-pane>
 			<a-tab-pane key="2">
 				<span slot="tab">
+					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="plimg" />
+					<span style="font-size: 12px;">陪练</span>
+				</span>
+				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
+					<a-carousel autoplay>
+						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
+					</a-carousel>
+					<a-row :gutter="0" style="padding-top: 24px;">
+						<a-col class="gutter-row" :span="6" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
+							<div class="gutter-box">
+								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
+								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
+							</div>
+						</a-col>
+					</a-row>
+					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">最新推荐</h5>
+						<a-row :gutter="0">
+							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
+								<div class="gutter-box">
+									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
+									<div style="padding: 8px 0;">{{ item.product_name }}</div>
+									<div style="overflow: auto;">
+										<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
+										<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+									</div>
+								</div>
+							</a-col>
+						</a-row>
+					</div>
+					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
+						<a-row :gutter="0">
+							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
+								<div>
+									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
+									<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
+										<div>{{item.office_name}}</div>
+										<div class="van-multi-ellipsis--l2" style="color: #999;">{{item.office_info}}</div>
+									</div>
+								</div>
+							</a-col>
+						</a-row>
+					</div>
+				</div>
+			</a-tab-pane>
+			<a-tab-pane key="3">
+				<span slot="tab">
 					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="wdimg" />
 					<span style="font-size: 12px;">我的</span>
 				</span>
@@ -96,6 +144,10 @@ export default {
 			tabPosition: 'bottom',
 			user_avatar: '',
 			user_name: '',
+			home_course_recommend_list: [],
+			home_org_recommend_list:[],
+			home_ad_list: [],
+			home_category_list: [],
 			course_recommend_list: [],
 			org_recommend_list:[],
 			ad_list: [],
@@ -104,7 +156,8 @@ export default {
 			allready: false,
 			paddingTop: '0px',
 			sumMoney: '',
-			plimg: require('../assets/ic_home_selected.png'),
+			indeximg:require('../assets/ic_home_selected.png'),
+			plimg: require('../assets/ic_pl_un_selected.png'),
 			wdimg: require('../assets/ic_mine_un_selected.png')
 		};
 	},
@@ -133,6 +186,7 @@ export default {
 			this.user_avatar = window._userInfo.user_avatar ? window._userInfo.user_avatar : require('../assets/head.jpg');
 			this.user_name = window._userInfo.user_name ? window._userInfo.user_name : window._userInfo.user_phone;
 			this.sumMoney = window._userInfo.apple_balance || '0.00';
+			this.getHomeData();
 			this.getMainData();
 		} else {
 			alert('个人信息未获取到~');
@@ -257,6 +311,37 @@ export default {
 				window.location.href = item.web_url;
 			}
 		},
+		getHomeData() {
+			let param = {
+				token: window._userInfo.token,
+				user_id: window._userInfo.id,
+				lesson_type: '1'
+			};
+			this.$axios({
+				method: 'get',
+				url: Api.StudentIndexGet,
+				params: { request_content: JSON.stringify(param) }
+			}).then(res => {
+				let data = res.data;
+				console.log('data', data);
+				if (data.code === '0') {
+					this.home_ad_list = data.data.ad_list;
+					this.home_course_recommend_list = data.data.course_recommend_list;
+					this.home_org_recommend_list = data.data.company_recommend_list
+					this.home_category_list = data.data.category_list;
+					this.home_category_list.length = 7;
+					let allItem = {
+						category_img: require('../assets/all.png'),
+						category_name: '全部',
+						id: ''
+					};
+					this.home_category_list.push(allItem);
+					this.allready = true;
+				} else {
+					this.$message.error(data.msg);
+				}
+			});
+		},
 		getMainData() {
 			let param = {
 				token: window._userInfo.token,
@@ -290,10 +375,16 @@ export default {
 		},
 		onChange(a) {
 			if (a == 1) {
-				this.plimg = require('../assets/ic_home_selected.png');
+				this.indeximg = require('../assets/ic_home_selected.png');
+				this.plimg = require('../assets/ic_pl_un_selected.png');
 				this.wdimg = require('../assets/ic_mine_un_selected.png');
 			} else if (a == 2) {
-				this.plimg = require('../assets/ic_home_un_selected.png');
+				this.indeximg = require('../assets/ic_home_un_selected.png');
+				this.plimg = require('../assets/ic_pl_selected.png');
+				this.wdimg = require('../assets/ic_mine_un_selected.png');
+			} else if (a == 3) {
+				this.indeximg = require('../assets/ic_home_un_selected.png');
+				this.plimg = require('../assets/ic_pl_un_selected.png');
 				this.wdimg = require('../assets/ic_mine_selected.png');
 			}
 			console.log(a);
@@ -404,7 +495,7 @@ export default {
 }
 .ant-tabs /deep/ .ant-tabs-nav > div .ant-tabs-tab {
 	padding: 4px 0 0 0;
-	width: 50%;
+	width: 33.33%;
 	margin: 0;
 }
 .mint-msgbox-wrapper /deep/ .mint-msgbox {
