@@ -8,7 +8,7 @@
 				</span>
 				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
 					<a-carousel autoplay>
-						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
+						<div v-for="item in home_ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
 					<a-row :gutter="0" style="padding-top: 24px;">
 						<a-col class="gutter-row" :span="6" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
