@@ -10,15 +10,15 @@
 					<a-carousel autoplay>
 						<div v-for="item in home_ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<a-row :gutter="0" style="padding-top: 24px;">
-						<a-col class="gutter-row" :span="6" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
+					<a-row class="category-list" :gutter="0" style="padding-top: 24px;">
+						<a-col class="gutter-row" :span="4" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
 							<div class="gutter-box">
 								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
 								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
 							</div>
 						</a-col>
 					</a-row>
-					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
+					<!-- <div class="art-recmmand" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">最新推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
@@ -32,10 +32,22 @@
 								</div>
 							</a-col>
 						</a-row>
-					</div>
+					</div> -->
 					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
 						<a-row :gutter="0">
+							<a-col class="gutter-row" :span="12" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)">
+								<div class="gutter-box">
+									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.office_img_url" />
+									<div style="padding: 8px 0;">{{ item.office_name }}</div>
+									<div style="overflow: auto;">
+										<div class="van-multi-ellipsis--l2" style="color:#BBB;font-size: 10px;">{{ item.office_info }}</div>
+										<!-- <label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label> -->
+									</div>
+								</div>
+							</a-col>
+						</a-row>
+						<!-- <a-row :gutter="0">
 							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
 								<div>
 									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
@@ -45,7 +57,7 @@
 									</div>
 								</div>
 							</a-col>
-						</a-row>
+						</a-row> -->
 					</div>
 				</div>
 			</a-tab-pane>
@@ -58,8 +70,8 @@
 					<a-carousel autoplay>
 						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<a-row :gutter="0" style="padding-top: 24px;">
-						<a-col class="gutter-row" :span="6" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
+					<a-row class="category-list" :gutter="0" style="padding-top: 24px;">
+						<a-col class="gutter-row" :span="4" v-for="item in category_list" :key="item.id" @click="gotocList(item)">
 							<div class="gutter-box">
 								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
 								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
@@ -67,21 +79,22 @@
 						</a-col>
 					</a-row>
 					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
-						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">最新推荐</h5>
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">陪练推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
 								<div class="gutter-box">
 									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
 									<div style="padding: 8px 0;">{{ item.product_name }}</div>
 									<div style="overflow: auto;">
-										<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
-										<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+										<label style="color:#E96525;">￥{{ item.product_price }}/节</label>
+										<!-- <span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
+										<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label> -->
 									</div>
 								</div>
 							</a-col>
 						</a-row>
 					</div>
-					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
+					<!-- <div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
@@ -94,7 +107,7 @@
 								</div>
 							</a-col>
 						</a-row>
-					</div>
+					</div> -->
 				</div>
 			</a-tab-pane>
 			<a-tab-pane key="3">
@@ -107,7 +120,7 @@
 						<img style="" :src="user_avatar" />
 						<span class="name">{{ user_name }}</span>
 						<br />
-						<span class="money">账户余额:{{ sumMoney }}</span>
+						<span class="money">余额:{{ sumMoney }}</span>
 					</div>
 					<div class="my-menus">
 						<div class="my-menu" @click="gotoOrder">
@@ -329,13 +342,13 @@ export default {
 					this.home_course_recommend_list = data.data.course_recommend_list;
 					this.home_org_recommend_list = data.data.company_recommend_list
 					this.home_category_list = data.data.category_list;
-					this.home_category_list.length = 7;
-					let allItem = {
-						category_img: require('../assets/all.png'),
-						category_name: '全部',
-						id: ''
-					};
-					this.home_category_list.push(allItem);
+					// this.home_category_list.length = 7;
+					// let allItem = {
+					// 	category_img: require('../assets/all.png'),
+					// 	category_name: '全部',
+					// 	id: ''
+					// };
+					// this.home_category_list.push(allItem);
 					this.allready = true;
 				} else {
 					this.$message.error(data.msg);
@@ -360,13 +373,13 @@ export default {
 					this.course_recommend_list = data.data.course_recommend_list;
 					this.org_recommend_list = data.data.company_recommend_list
 					this.category_list = data.data.category_list;
-					this.category_list.length = 7;
-					let allItem = {
-						category_img: require('../assets/all.png'),
-						category_name: '全部',
-						id: ''
-					};
-					this.category_list.push(allItem);
+					// this.category_list.length = 7;
+					// let allItem = {
+					// 	category_img: require('../assets/all.png'),
+					// 	category_name: '全部',
+					// 	id: ''
+					// };
+					// this.category_list.push(allItem);
 					this.allready = true;
 				} else {
 					this.$message.error(data.msg);
@@ -401,6 +414,14 @@ export default {
 					category_id: item.id
 				}
 			});
+		},
+		gotocList(item) {
+			this.$router.push({
+				path: '/clist',
+				query: {
+					category_id: item.id
+				}
+			});
 		}
 	}
 };
@@ -424,8 +445,13 @@ export default {
 .art-recmmand .gutter-row {
 	min-height: 185px;
 }
-.art-recmmand-org .gutter-row {
+.category-list .gutter-row{
+	width:20%;
+}
+.art-recmmand-org .gutter-box {
 	max-height: 100px;
+	width:95%;
+	margin: 0 auto;
 }
 .art-recmmand .gutter-box {
 	width: 95%;

@@ -49,8 +49,8 @@
 						<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
 						<div style="overflow: auto;text-align: left;">
 							<!-- <van-tag type="primary" plain style="padding:0 4px;position: relative;left: 12px;top: -1px;">{{item.lesson_type== '1'?'主课':'陪练'}}</van-tag> -->
-							<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
-							<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+							<!-- <span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span> -->
+							<label style="color:#E96525;">￥{{ item.product_price }}/节</label>
 						</div>
 					</div>
 				</a-col>

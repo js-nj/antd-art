@@ -1,5 +1,12 @@
 <template>
 	<div>
+		<el-alert
+    title="成功提示的文案"
+    type="success">
+  </el-alert>
+	<div style="padding:16px;background-color: #f0f9eb;color: #67c23a;text-align:left;font-size:12px;">
+		请到应用商店搜索"云途艺学" 下载APP，并在APP里预约上课！
+	</div>
 	<a-list class="demo-loadmore-list" :loading="loading" item-layout="horizontal" :data-source="data">
 		<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
 			<a-spin v-if="loadingMore" />

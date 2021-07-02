@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<van-search v-model="keywords" placeholder="请输入机构名称" @search="onSearch"/>
+		<van-search v-model="keywords" placeholder="请输入课程名称" @search="onSearch"/>
 		<a-list class="demo-loadmore-list" :loading="loading" item-layout="horizontal" :data-source="data">
 			<div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
 				<a-spin v-if="loadingMore" />
@@ -8,20 +8,17 @@
 			</div>
 			<a-list-item slot="renderItem" slot-scope="item, index" @click="gotoCourse(item)">
 				<a-list-item-meta>
-					<a class="art-item-name" slot="title" style="">{{ item.name }}</a>
+					<a class="art-item-name" slot="title" style="">{{ item.product_name }}</a>
 					<div slot="description" style="text-align: left;">
-						<div class="van-multi-ellipsis--l3" style="font-size: 13px;">
-							{{item.office_info}}
+						<!-- {{ item.teacher_name ? item.teacher_name : '  ' }} -->
+						<i style="font-style: normal;color:#E96525;font-size: 14px;">￥{{ item.product_price }}/节</i>
+						<br />
+						<div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
+							<span>已经有{{item.visit_count}}人学习</span>
+							<!-- <i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">￥{{ item.product_price }}/节</i> -->
 						</div>
-						<!-- <div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
-							<span>学生数量：{{item.student_count}}</span>
-							<span v-html="'\u00a0\u00a0\u00a0\u00a0'"></span>
-							<span>教师数量：{{ item.teacher_count }}</span>
-							
-							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">教师数量{{ item.teacher_count }}</i> 
-						</div> -->
 					</div>
-					<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.img_url" />
+					<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.product_img_url" />
 				</a-list-item-meta>
 			</a-list-item>
 		</a-list>
@@ -108,15 +105,19 @@ export default {
 			let param = {
 				page: this.page, //	int	*当前页数
 				limit: 10, //	int	*页面大小
-				// token: window._userInfo.token, //	*用户token
+				token: window._userInfo.token, //	*用户token
 				user_id: window._userInfo.id, //	string	*用户ID
-				// user_type:'0',//	string	*1学生，0老师
+				user_type:'0',//	string	*1学生，0老师
 				category_id:this.category_id,//	string	类别ID
+				course_level:'',//	string	课程难度，1-5级，入门，初级，中级，高级，特级
+				// order_type:'1',//	string	排序类型，1综合2销售3上新4好评5价格高到低6价格低到高
+				teacher_id:'',//	string	教师ID
 				keywords:this.keywords,//	string	商品名称搜素关键词
+				product_status:'',//
 			};
 			this.$axios({
 				method: 'get',
-				url: Api.OfficeList,//Api.ProductList
+				url: Api.ProductList,
 				params: { request_content: JSON.stringify(param) }
 			}).then(res => {
 				let data = res.data;
@@ -141,9 +142,9 @@ export default {
 		},
 		gotoCourse(item) {
 			this.$router.push({
-				path: '/organization',
+				path: '/course',
 				query: {
-					id: item.id
+					product_id: item.id
 				}
 			});
 		},
@@ -173,7 +174,7 @@ export default {
 		  -webkit-line-clamp: 2;
 		  line-clamp: 2;
 		  -webkit-box-orient: vertical;
-		  color:#333;height: 24px;
+		  color:#333;height: 34px;
 	}
 .demo-loadmore-list {
 	padding: 16px 16px;
@@ -193,14 +194,13 @@ export default {
 	/* margin-bottom: 15px; */
 	border-bottom: none;
 	display: block;
-	border-bottom: solid 1px #e8e8e8;
 }
 .ant-list-item-meta-description {
 	/* position: relative;
 	top:12px; */
 	line-height: 20px;
 }
-/*.ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
+.ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
 	border-bottom: none;
-}*/
+}
 </style>
