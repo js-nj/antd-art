@@ -17,4 +17,6 @@ export default {
 	TeacherList: rootPath + '/WebService.asmx/TeacherList',
 	TeacherDetails: rootPath + '/WebService.asmx/TeacherDetails',
 	OfficeList: rootPath + '/WebService.asmx/OfficeList',
+
+	ProductPrice: rootPath + '/WebService.asmx/ProductPrice',
 }

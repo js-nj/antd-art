@@ -20,7 +20,9 @@
 			<a-list-item-meta>
 				<a slot="title" style="color:#333;">{{ item.products[0].product_name }}</a>
 				<div slot="description" style="text-align: left;">
-					{{ item.products[0].teacher_name ? item.products[0].teacher_name : '' }}
+					<template v-if="item.lesson_type == '1'">
+						{{ item.products[0].teacher_name ? item.products[0].teacher_name : '' }}
+					</template>
 					<br />
 					<div style="color:#333;overflow: auto;">
 						￥{{ item.products[0].product_price }}
@@ -129,7 +131,8 @@ export default {
 					count: item.products[0].product_count,
 					price: item.products[0].product_price,
 					totalprice: item.products[0].total_price,
-					product_id:item.products[0].product_id
+					product_id:item.products[0].product_id,
+					lesson_type:item.products[0].lesson_type
 				}
 			});
 		},
@@ -146,7 +149,8 @@ export default {
 					price: item.products[0].product_price,
 					totalprice: item.products[0].total_price,
 					product_id:item.products[0].product_id,
-					product_img_url:item.products[0].product_img_url
+					product_img_url:item.products[0].product_img_url,
+					lesson_type:item.products[0].lesson_type
 				}
 			});
 		}

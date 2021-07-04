@@ -11,11 +11,11 @@
 			<van-row style="padding-top: 12px;">
 			  <van-col span="8">好评度：{{this.rate}}%</van-col>
 			  <van-col span="8">课程数：{{this.course}}</van-col>
-			  <van-col span="8">学生数：{{this.students}}</van-col>
+			  <van-col span="8">浏览量：{{this.visit_count}}</van-col>
 			</van-row>
 		</div>
 		<van-tabs v-model="active">
-		  <van-tab title="品牌介绍">
+		  <van-tab title="主页">
 		  	<div style="text-align:left;padding:12px;background: #fff;margin-top: 12px;max-height:86px;">
 		  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">品牌介绍</div>
 		  		<div style="padding-top: 12px;">
@@ -26,7 +26,7 @@
 				</div>
 		  	</div>
 		  </van-tab>
-		  <van-tab title="主课">
+		  <van-tab title="课程">
 		  	<a-row :gutter="0" style="margin-top: 12px;padding: 0px 8px;background: #fff;">
 				<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in course_list" :key="item.id" @click="gotoCourse(item)">
 					<div class="gutter-box">
@@ -56,16 +56,17 @@
 				</a-col>
 			</a-row>
 		  </van-tab>
-		  <van-tab title="教师">
+		  <van-tab title="商品">
 		  	<div style="margin-top: 12px;">
-		  		<div v-for="item in teacher_list" style="border-bottom: 1px solid #EEEEEE;background:#fff;padding:12px 6px;">
+		  		<img :src="nodata" style="width:180px;display:block;margin:0 auto;margin-top:50px;" />
+		  		<!-- <div v-for="item in teacher_list" style="border-bottom: 1px solid #EEEEEE;background:#fff;padding:12px 6px;">
 					<img :src="item.user_avatar" style="width:44px;height:44px;display:inline-block;border-radius:22px;vertical-align:top;">
 					<div style="padding-left:20px;display:inline-block;width:200px;text-align:left;height:44px;line-height:44px;">
 						<div style="font-size:16px;line-height:22px;">{{item.user_name}}</div>
 						<div style="font-size:14px;color:#999;line-height:22px;">{{item.user_info}}</div>
 					</div>
 					<van-button type="default" size="small" round style="width:60px;height:20px;vertical-align:top;position: relative;top: 10px;" @click="gotoViewTeacher(item)">查看</van-button>
-				</div>
+				</div> -->
 		  	</div>
 		  </van-tab>
 		</van-tabs>
@@ -99,11 +100,13 @@ export default {
 			rate:'',
 			course:'',
 			students:'',
+			visit_count:'',
 			active:0,
 			course_list:[],
 			sparecourse_list:[],
 			teacher_list:[],
-			office_id:''
+			office_id:'',
+			nodata:require('../assets/nodata.png')
 		}
 	},
 	methods:{
@@ -140,6 +143,7 @@ export default {
 				this.rate = data.data.evaluate_point;
 				this.course = data.data.lesson_count;
 				this.students = data.data.student_count;
+				this.visit_count = data.data.visit_count;
 	          } else {
 	            this.$message.error(data.msg);
 	          }

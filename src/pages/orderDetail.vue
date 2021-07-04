@@ -11,7 +11,9 @@
 						<a-list-item-meta>
 							<a slot="title" style="color:#333;">{{course_name}}</a>
 							<div slot="description" style="text-align: left;">
-								{{course_teacher}}
+								<template v-if="lesson_type == '1'">
+									{{course_teacher}}
+								</template>
 								<br />
 								<div style="color:#333;overflow: auto;">
 									￥{{course_price}}/节
@@ -67,7 +69,8 @@
 				course_count:'',
 				course_price:'',
 				course_totalprice:'',
-				course_imgurl:''
+				course_imgurl:'',
+				lesson_type:''
 			}
 		},
 		created() {
@@ -82,6 +85,7 @@
 				this.course_price = routeParam.price;
 				this.course_totalprice = routeParam.totalprice;
 				this.course_imgurl = routeParam.product_img_url;
+				this.lesson_type = routeParam.lesson_type;
 			}
 		},
 		methods:{

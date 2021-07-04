@@ -26,6 +26,18 @@
 				</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
+				<a-col :span="6" style="text-align:left;">一对几</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ one_name }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;">
+				<a-col :span="6" style="text-align:left;">难度</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ level_name }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;">
+				<a-col :span="6" style="text-align:left;">时长</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ time_name }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">课程单价</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ course_price }}/节</a-col>
 			</a-row>
@@ -56,12 +68,18 @@ export default {
 			}else {
 				this.course_count = routeParam.count;
 			}
-			this.course_price = routeParam.price;
+			this.course_price = routeParam.ProductPrice;
 			// this.course_totalprice = routeParam.totalprice;
 			this.course_id = routeParam.product_id;
 			this.order_num = routeParam.order_num;
 			this.teacher_id = routeParam.teacher_id;
-			this.pay_price = routeParam.price * this.course_count;
+
+			this.one_name = routeParam.one_name;
+			this.level_name = routeParam.level_name;
+			this.time_name = routeParam.time_name;
+			this.ProductPrice = routeParam.ProductPrice;
+
+			this.pay_price = this.ProductPrice * this.course_count;
 		}
 	},
 	data() {
@@ -73,7 +91,11 @@ export default {
 			course_price: '',
 			course_id: '',
 			teacher_id:'',
-			order_num:''
+			order_num:'',
+			one_name:'',
+			level_name:'',
+			time_name:'',
+			ProductPrice:''
 		};
 	},
 	methods: {

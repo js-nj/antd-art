@@ -12,9 +12,9 @@
 					<h5 class="c-item-subT">{{ course_name }}</h5>
 					<div class="c-item-subB">
 						<span>{{ course_personNum }}人参加</span>
-						<label>￥
+						<label class="label">￥
 							<i>{{ course_price }}</i>
-							/节
+							/节起
 						</label>
 					</div>
 				</div>
@@ -24,7 +24,7 @@
 						<a-tag color="blue" v-for="item in course_tags" :key="item.id">{{ item.tag_name }}</a-tag>
 					</div>
 				</div>
-				<div class="c-item-b" @click="gotoTeacher(teacher_id)">
+				<div class="c-item-b" @click="gotoTeacher(teacher_id)" v-if="this.product_type == '1'">
 					<h5 class="c-item-subT">老师</h5>
 					<div class="c-item-subB">
 						<div style="background: #F7F7F7;border-radius: 8px;width:200px;padding:12px;">
@@ -40,9 +40,42 @@
 					<h5 class="c-item-subT">课程介绍</h5>
 					<div class="c-item-subB">{{ course_introduction }}</div>
 				</div>
-				<div class="c-item-b">
+				<div class="c-item-b" v-if="this.product_type == '1'">
 					<h5 class="c-item-subT">课程大纲</h5>
 					<div class="c-item-subB">{{ course_introduction }}</div>
+				</div>
+				<div class="c-item-b" v-if="this.product_type != '1' && this.one_idDic.length>0">
+					<h5 class="c-item-subT">1对几</h5>
+					<div class="c-item-subB">
+				      <a-radio-group v-model="one_id"  @change="one_idonChange" :default-value="one_id" button-style="solid">
+				        <a-radio-button :value="sub.one_id" v-for="sub in one_idDic">
+				          {{sub.one_name}}
+				        </a-radio-button>
+				      </a-radio-group>
+				    </div>
+				</div>
+				<div class="c-item-b" v-if="this.product_type != '1' && this.level_idDic.length>0">
+					<h5 class="c-item-subT">难度</h5>
+					<div class="c-item-subB">
+				      <a-radio-group v-model="level_id"  @change="level_idonChange" :default-value="level_id" button-style="solid">
+				        <a-radio-button :value="sub.level_id" v-for="sub in level_idDic">
+				          {{sub.level_name}}
+				        </a-radio-button>
+				      </a-radio-group>
+				    </div>
+				</div>
+				<div class="c-item-b" v-if="this.product_type != '1' && this.time_idDic.length>0">
+					<h5 class="c-item-subT">时长</h5>
+					<div class="c-item-subB">
+				      <a-radio-group  v-model="time_id" @change="time_idonChange" :default-value="time_id" button-style="solid">
+				        <a-radio-button :value="sub.time_id" v-for="sub in time_idDic">
+				          {{sub.time_name}}
+				        </a-radio-button>
+				      </a-radio-group>
+				    </div>
+				</div>
+				<div class="c-item-b" v-if="this.product_type != '1'">
+					<h5 class="c-item-subT" style="display:inline-block;">单价：</h5>{{ProductPrice}}元/节
 				</div>
 			</div>
 			<!-- <div class="c-item">
@@ -55,8 +88,8 @@
 			</div> -->
 		</div>
 		<div class="course-button">
-			<div style="display:inline-block;width: 48px;height:50px;">
-				<div style="position: relative;left: 0px;top: 8px;line-height: 12px;" @click="gotoJigou()">
+			<div style="display:inline-block;width: 48px;height:50px;" v-if="this.product_type == '1'">
+				<div style="position: relative;left: 0px;top: 8px;line-height: 12px;" @click="gotoJigou()" >
 					<img :src="jigou" style="width:20px;height:20px;" />
 					<div style="font-size:12px;line-height:12px;">机构</div>
 				</div>
@@ -68,6 +101,7 @@
 
 <script>
 import Api from '../api/api.js';
+// import 'ant-design-vue/lib/radio/style/index.css';
 export default {
 	name: 'course',
 	created() {
@@ -97,10 +131,56 @@ export default {
 			office_id:'',
 			course_obj: '',
 			product_id:'',
-			jigou:require('../assets/jigou.png')
+			product_type:'',
+			one_name:'',
+			one_id:'',
+			one_idDic:[],
+			level_name:'',
+			level_id:'',
+			level_idDic:[],
+			time_name:'',
+			time_id:'',
+			time_idDic:[],
+			jigou:require('../assets/jigou.png'),
+			ProductPrice:''
 		};
 	},
+	watch:{
+		one_id(val){
+			this.one_idDic.forEach(g=>{
+				if(g.one_id == val){
+					this.one_name = g.one_name;
+				}
+			})
+			this.getProductPrice();
+		},
+		level_id(val){
+			this.level_idDic.forEach(g=>{
+				if(g.level_id == val){
+					this.level_name = g.level_name;
+				}
+			})
+			this.getProductPrice();
+		},
+		time_id(val){
+			this.time_idDic.forEach(g=>{
+				if(g.time_id == val){
+					this.time_name = g.time_name;
+				}
+			})
+			this.getProductPrice();
+		},
+	},
 	methods: {
+		one_idonChange(){
+
+		},
+		level_idonChange(){
+			
+		},
+		time_idonChange(){
+
+		},
 		gotoTeacher(){
 			this.$router.push({
 				path: '/teacher',
@@ -128,7 +208,11 @@ export default {
 					price: this.course_price,
 					totalprice: this.course_obj.product_total_price,
 					product_id:this.course_obj.product_id,
-					teacher_id:this.course_obj.teacher_id
+					teacher_id:this.course_obj.teacher_id,
+					one_name:this.one_name,
+					level_name:this.level_name,
+					time_name:this.time_name,
+					ProductPrice:this.ProductPrice
 				}
 			});
 		},
@@ -159,8 +243,39 @@ export default {
 					this.course_video = data.data.product_video_url;
 					this.course_count = data.data.product_count;
 					this.office_id = data.data.office_id;
+					this.product_type = data.data.product_type;
+					this.one_idDic = data.data.ones;
+					this.level_idDic = data.data.levels;
+					this.time_idDic = data.data.times;
+					this.one_id = data.data.ones[0].one_id;
+					this.level_id = data.data.levels[0].level_id;
+					this.time_id = data.data.times[0].time_id;
 					// this.$message.info('This is a normal message');
-					// localStorage.userInfo = JSON.stringify(data.list[0]);
+					// localStorage.userInfo = JSON.stringify(data.list[0])
+					// this.getProductPrice();
+				} else {
+					this.$message.error(data.msg);
+				}
+			});
+		},
+		getProductPrice(){
+			let param = {
+				product_id: this.product_id,
+				user_id: window._userInfo.id,
+				user_type:'1',//	string	用户类型
+				token:window._userInfo.token,//	string	用户token
+				one_id:this.one_id,//	string	1对几ID
+				level_id:this.level_id,//	string	难度ID
+				time_id:this.time_id,//
+			};
+			this.$axios({
+				method: 'get',
+				url: Api.ProductPrice,
+				params: { request_content: JSON.stringify(param) }
+			}).then(res => {
+				let data = res.data;
+				if (data.code === '0') {
+					this.ProductPrice = data.data;
 				} else {
 					this.$message.error(data.msg);
 				}
@@ -210,11 +325,16 @@ export default {
 .c-item-subB {
 	font-size: 12px;
 	overflow: auto;
+	padding: 8px 0 0 1px;
 }
 .c-item-subB span {
 	/* font-size: 12px; */
 }
 .c-item-subB label {
+	/*color: #eb7034;*/
+	float: right;
+}
+.c-item-subB .label {
 	color: #eb7034;
 	float: right;
 }
