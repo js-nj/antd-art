@@ -114,6 +114,7 @@ export default {
 				teacher_id:'',//	string	教师ID
 				keywords:this.keywords,//	string	商品名称搜素关键词
 				product_status:'',//
+				lesson_type: '2'
 			};
 			this.$axios({
 				method: 'get',

@@ -24,21 +24,37 @@
 						<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
 					</div>
 				</div>
+				<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">名师风采</div>
+		  		<div style="padding-top: 12px;">
+					<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
+					<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
+						<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
+					</div>
+				</div>
 		  	</div>
 		  </van-tab>
 		  <van-tab title="课程">
-		  	<a-row :gutter="0" style="margin-top: 12px;padding: 0px 8px;background: #fff;">
+		  	<div style="text-align: left;padding: 8px;background: #fff;font-size: 14px;">
+		  		<!-- <label v-for="sub in cat" :key="sub.cat_id" :class="{'active':sub.select}" style="display: inline-block;vertical-align: top;padding: 0 12px 0 0;" @click="activeTag(sub)">
+		  			<span v-html="sub.cat_name + '  ' + sub.product_count"></span>
+		  		</label> -->
+		  		<a-tag :color="item.select?'blue':''" v-for="item in cat" :key="item.id" @click="activeTag(item)">{{ item.cat_name + '  ' + item.product_count }}</a-tag>
+		  	</div>
+		  	<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
 				<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in course_list" :key="item.id" @click="gotoCourse(item)">
 					<div class="gutter-box">
 						<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
 						<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
 						<div style="overflow: auto;text-align: left;">
 							<!-- <van-tag type="primary" plain style="padding:0 4px;position: relative;left: 12px;top: -1px;">{{item.lesson_type== '1'?'主课':'陪练'}}</van-tag> -->
-							<span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
+							<span style="color:#BBB;font-size: 10px;">{{ item.teacher_name }}</span>
 							<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
 						</div>
 					</div>
 				</a-col>
+				<div style="padding: 64px 32px;" v-if="course_list.length == 0">
+					暂无相关课程
+				</div>
 			</a-row>
 		  </van-tab>
 		  <van-tab title="陪练">
@@ -106,10 +122,24 @@ export default {
 			sparecourse_list:[],
 			teacher_list:[],
 			office_id:'',
+			cat:[],
 			nodata:require('../assets/nodata.png')
 		}
 	},
 	methods:{
+		activeTag(param){
+			// console.log(99,this.cat)
+			this.cat.forEach((sun,index)=>{
+				if(sun.cat_id == param.cat_id){
+					this.$set(this.cat[index],'select',true);
+					// sun.select = true;
+				}else {
+					// sun.select = false;
+					this.$set(this.cat[index],'select',false);
+				}
+			});
+			this.getOrgCourse(param.cat_id);
+		},
 		gotoCourse(item){
 			this.$router.push({
 				path: '/course',
@@ -144,6 +174,15 @@ export default {
 				this.course = data.data.lesson_count;
 				this.students = data.data.student_count;
 				this.visit_count = data.data.visit_count;
+				this.cat = data.data.cat_list;
+				this.cat[0].select = true;
+				// this.cat.forEach(sub=>{
+				// 	if(sub.cat_id){
+				// 		sub.select = false;
+				// 	}else {
+				// 		sub.select = true;
+				// 	}
+				// });
 	          } else {
 	            this.$message.error(data.msg);
 	          }
@@ -172,11 +211,12 @@ export default {
 	          this.$message.error(error);
 	        })
 		},
-		getOrgCourse(){
+		getOrgCourse(category_id){
 			var tmpParam = {
 				page:'1',
 				limit:'100',
-		        office_id:this.office_id
+		        office_id:this.office_id,
+		        category_id:category_id?category_id:''
 		    };
 	      	this.$axios({
 				method: 'get',
@@ -231,5 +271,7 @@ export default {
 	background-size: 100% 100%;
 	position: relative;
 }*/
-
+.active {
+	color:#1890ff;
+}
 </style>

@@ -47,17 +47,32 @@
 								</div>
 							</a-col>
 						</a-row>
-						<!-- <a-row :gutter="0">
-							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
-								<div>
-									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
-									<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
-										<div>{{item.office_name}}</div>
-										<div class="van-multi-ellipsis--l2" style="color: #999;">{{item.office_info}}</div>
-									</div>
-								</div>
-							</a-col>
-						</a-row> -->
+					</div>
+					<div class="art-recmmand-org" style="text-align: left;padding-top: 8px;">
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">学艺资讯</h5>
+						<van-list
+						  v-model="loading"
+						  :finished="finished"
+						  finished-text="没有更多了"
+						  @load="getCMSList"
+						>
+							<div class="wy-news-items">
+		                      <div class="wy-news-item" v-for="item in list" @click="gotoDetail(item)">
+		                        <div class="wy-news-item-body">
+		                          <div class="wy-news-item-title van-multi-ellipsis--l2">{{htmlDecodeByRegEx(item.cms_title)}}</div>
+		                          <div class="wy-news-item-des">
+		                            <!-- <div class="van-ellipsis">{{htmlDecodeByRegEx(item.cms_content)}}</div> -->
+		                            <span class="">{{item.create_time}}</span>
+		                            <span class="wy-news-item-read">{{item.hits+'人阅读'}}</span>
+		                          </div>
+		                        </div>
+		                        <div class="wy-news-item-img">
+		                          <img :src="item.cms_img_url" />
+		                        </div>
+		                      </div>
+		                    </div>
+						  <!-- <van-cell v-for="item in list" :key="item" :title="item" /> -->
+						</van-list>
 					</div>
 				</div>
 			</a-tab-pane>
@@ -148,9 +163,12 @@
 import Api from '../api/api.js';
 import { MessageBox } from 'bh-mint-ui2';
 import 'bh-mint-ui2/lib/style.css';
+import { List } from 'vant';
+import 'vant/lib/list/style';
 export default {
 	components: {
-		MessageBox
+		MessageBox,
+		[List.name]: List,
 	},
 	data() {
 		return {
@@ -171,7 +189,13 @@ export default {
 			sumMoney: '',
 			indeximg:require('../assets/ic_home_selected.png'),
 			plimg: require('../assets/ic_pl_un_selected.png'),
-			wdimg: require('../assets/ic_mine_un_selected.png')
+			wdimg: require('../assets/ic_mine_un_selected.png'),
+			list: [],
+		    loading: false,
+		    finished: false,
+		    listTotal:20,
+		    page:0,
+		    limitPage:0
 		};
 	},
 	created() {
@@ -201,11 +225,69 @@ export default {
 			this.sumMoney = window._userInfo.apple_balance || '0.00';
 			this.getHomeData();
 			this.getMainData();
+			this.getCMSList();
 		} else {
 			alert('个人信息未获取到~');
 		}
 	},
 	methods: {
+		gotoDetail(item){
+	      if (item.cms_type == '2') {
+	        window.location.href = item.cms_url;
+	      }else {
+	      	this.$router.push({
+				path: '/detail',
+				query: {
+					id:item.id
+				}
+			});
+	        // window.location.href = window.location.origin+window.location.pathname + '#/detail?id='+item.id;
+	      }
+	    },
+	    htmlDecodeByRegEx(str){
+	         var temp = "";
+	         if(str.length == 0) return "";
+	         temp = str.replace(/&amp;/g,"&");
+	         temp = temp.replace(/&lt;/g,"<");
+	         temp = temp.replace(/&gt;/g,">");
+	         temp = temp.replace(/&nbsp;/g," ");
+	         temp = temp.replace(/&#39;/g,"\'");
+	         temp = temp.replace(/&quot;/g,"\"");
+	         temp = temp.replace(/&ldquo;/g,"\“");
+	         temp = temp.replace(/&rdquo;/g,"\”");
+	         return temp;
+	    },
+		getCMSList(){
+			if(this.page > this.limitPage){
+				return;
+			}
+			this.page++
+			let param = {
+				user_id: window._userInfo.id,
+				page:this.page,//	int	*当前页数
+				limit:'10',//
+			};
+			this.$axios({
+				method: 'get',
+				url: Api.CMSList,
+				params: { request_content: JSON.stringify(param) }
+			}).then(res => {
+				let data = res.data;
+				if (data.code === '0') {
+					this.list = this.list.concat(data.data);
+					// 加载状态结束
+			        this.loading = false;
+			        this.listTotal = Number(data.count) || 20;
+			        this.limitPage = Number(data.count)/10;
+			        // 数据全部加载完成
+			        if (this.list.length >= this.listTotal) {
+			          this.finished = true;
+			        }
+				} else {
+					this.$message.error(data.msg);
+				}
+			});
+		},
 		gotoOrg(item){
 			this.$router.push({
 				path: '/organization',
@@ -449,7 +531,7 @@ export default {
 	width:20%;
 }
 .art-recmmand-org .gutter-box {
-	max-height: 100px;
+	/*max-height: 100px;*/
 	width:95%;
 	margin: 0 auto;
 }
@@ -526,5 +608,69 @@ export default {
 }
 .mint-msgbox-wrapper /deep/ .mint-msgbox {
 	background-color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+.wy-news-items{
+      /*padding: 0 16px;*/
+      overflow: auto;
+}
+.wy-news-item{
+  padding: 12px 0;
+      border-top: solid 1px #F7F7F7;
+      position: relative;
+}
+.wy-news-item-body {
+  width: calc(100% - 104px);
+      padding-left: 8px;
+}
+.wy-news-item-body,.wy-news-item-img {
+  display: inline-block;
+  vertical-align: top;
+}
+.wy-news-item-img {
+  /*width: 100px;*/
+  line-height: 1;
+  /*padding-top: 4px;*/
+}
+.wy-news-item-body {
+  width: calc(100% - 101px);
+  /*width: calc(100% - 105px);*/
+    text-align: left;
+}
+.wy-news-item-title {
+  padding: 0 0 4px 0;
+  color: #333;
+  width:100%;
+/*    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;*/
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.wy-news-item-des {
+  font-size: 12px;
+  color: #666;
+}
+.wy-news-item-read {
+  display: inline-block;
+  padding-left: 12px;
+}
+.wy-news-item-img img {
+  width: 95px;
+  height: 65px;
 }
 </style>
