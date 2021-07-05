@@ -17,20 +17,59 @@
 		<van-tabs v-model="active">
 		  <van-tab title="主页">
 		  	<div style="text-align:left;padding:12px;background: #fff;margin-top: 12px;max-height:86px;">
-		  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">品牌介绍</div>
-		  		<div style="padding-top: 12px;">
-					<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
-					<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
-						<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
+		  		<div>
+		  			<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">名师风采</div>
+			  		<div style="padding-top: 12px;">
+						<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
+						<a-col style="margin-top:4px;" class="gutter-row" :span="6" v-for="item in teacher_list" :key="item.id" @click="gotoViewTeacher(item)">
+							<div class="gutter-box">
+								<img style="width:60px;height:60px;display:block;margin:0 auto;border-radius: 30px;padding: 0 2px;" :src="item.user_avatar" />
+								<div style="padding: 8px 0;text-align: center;">{{ item.user_name }}</div>
+							</div>
+						</a-col>
+					</a-row>
 					</div>
-				</div>
-				<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">名师风采</div>
-		  		<div style="padding-top: 12px;">
-					<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
-					<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
-						<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
+		  		</div>
+		  		<div style="border-top:solid 1px #d8d8d8;padding-top: 8px;">
+			  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">品牌介绍</div>
+			  		<div style="padding-top: 12px;">
+						<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
+						<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
+							<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
+						</div>
 					</div>
-				</div>
+		  		</div>
+		  		
+				<div style="border-top:solid 1px #d8d8d8;padding-top: 8px;">
+		  			<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">课程推荐</div>
+			  		<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
+						<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in home_recourse_list" :key="item.id" @click="gotoCourse(item)">
+							<div class="gutter-box">
+								<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
+								<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
+								<div style="overflow: auto;text-align: left;">
+									<span style="color:#BBB;font-size: 10px;">{{ item.teacher_name }}</span>
+									<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+								</div>
+							</div>
+						</a-col>
+					</a-row>
+		  		</div>
+		  		<div style="border-top:solid 1px #d8d8d8;padding-top: 8px;">
+		  			<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">陪练课程</div>
+			  		<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
+						<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in home_plcourse_list" :key="item.id" @click="gotoCourse(item)">
+							<div class="gutter-box">
+								<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
+								<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
+								<div style="overflow: auto;text-align: left;">
+									<span style="color:#BBB;font-size: 10px;">{{ item.teacher_name }}</span>
+									<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label>
+								</div>
+							</div>
+						</a-col>
+					</a-row>
+		  		</div>
 		  	</div>
 		  </van-tab>
 		  <van-tab title="课程">
@@ -123,7 +162,10 @@ export default {
 			teacher_list:[],
 			office_id:'',
 			cat:[],
-			nodata:require('../assets/nodata.png')
+			nodata:require('../assets/nodata.png'),
+			home_recourse_list:[],
+			home_plcourse_list:[]
+
 		}
 	},
 	methods:{
@@ -234,6 +276,8 @@ export default {
 						this.sparecourse_list.push(sub);  
 					  }
 				  });
+				  this.home_recourse_list = this.course_list.slice(0,2);
+				  this.home_plcourse_list = this.sparecourse_list.slice(0,2);
 	          	// this.course_list = data.data;
 	          } else {
 	            this.$message.error(data.msg);
