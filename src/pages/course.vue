@@ -13,7 +13,7 @@
 					<div class="c-item-subB">
 						<span>{{ course_personNum }}人参加</span>
 						<label class="label">￥
-							<i>{{ course_price }}</i>
+							<i>{{ ProductPrice }}</i>
 							/节起
 						</label>
 					</div>

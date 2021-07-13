@@ -85,20 +85,20 @@
 					<a-carousel autoplay>
 						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<a-row class="category-list" :gutter="0" style="padding-top: 24px;">
+					<!-- <a-row class="category-list" :gutter="0" style="padding-top: 24px;">
 						<a-col class="gutter-row" :span="4" v-for="item in category_list" :key="item.id" @click="gotocList(item)">
 							<div class="gutter-box">
 								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
 								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
 							</div>
 						</a-col>
-					</a-row>
+					</a-row> -->
 					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">陪练推荐</h5>
 						<a-row :gutter="0">
-							<a-col class="gutter-row" :span="12" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
+							<a-col class="gutter-row" :span="24" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
 								<div class="gutter-box">
-									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
+									<img style="width:100%;height:150px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
 									<div style="padding: 8px 0;">{{ item.product_name }}</div>
 									<div style="overflow: auto;">
 										<label style="color:#E96525;">￥{{ item.product_price }}/节</label>
@@ -532,7 +532,7 @@ export default {
 }
 .art-recmmand-org .gutter-box {
 	/*max-height: 100px;*/
-	width:95%;
+	width:100%;
 	margin: 0 auto;
 }
 .art-recmmand .gutter-box {
