@@ -98,7 +98,7 @@
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="24" v-for="item in course_recommend_list" :key="item.id" @click="gotoCourse(item)">
 								<div class="gutter-box">
-									<img style="width:100%;height:150px;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
+									<img style="width:100%;height:11rem;display: inline-block;border-radius: 4px;" :src="item.product_img_url" />
 									<div style="padding: 8px 0;">{{ item.product_name }}</div>
 									<div style="overflow: auto;">
 										<label style="color:#E96525;">￥{{ item.product_price }}/节</label>
