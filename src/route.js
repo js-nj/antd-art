@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './pages/login.vue'
 import Index from './pages/index.vue'
+import detail from './pages/detail.vue'
 import Course from './pages/course.vue'
 import List from './pages/list.vue'
 import cList from './pages/clist.vue'
@@ -20,6 +21,9 @@ export const constantRoutes = [{
 }, {
   path: '/index',
   component: Index
+}, {
+  path: '/detail',
+  component: detail
 }, {
   path: '/course',
   component: Course

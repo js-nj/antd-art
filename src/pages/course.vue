@@ -13,7 +13,7 @@
 					<div class="c-item-subB">
 						<span>{{ course_personNum }}人参加</span>
 						<label class="label">￥
-							<i>{{ course_price }}</i>
+							<i>{{ ProductPrice }}</i>
 							/节起
 						</label>
 					</div>
@@ -75,7 +75,12 @@
 				    </div>
 				</div>
 				<div class="c-item-b" v-if="this.product_type != '1'">
-					<h5 class="c-item-subT" style="display:inline-block;">单价：</h5>{{ProductPrice}}元/节
+					<h5 class="c-item-subT" style="margin-bottom: 8px;">单价</h5>
+					<div class="ant-radio-group-solid">
+						<div class="ant-radio-button-wrapper ant-radio-button-wrapper-checked">
+							{{ProductPrice}}元/节
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- <div class="c-item">
@@ -212,7 +217,11 @@ export default {
 					one_name:this.one_name,
 					level_name:this.level_name,
 					time_name:this.time_name,
-					ProductPrice:this.ProductPrice
+					one_id:this.one_id,
+					level_id:this.level_id,
+					time_id:this.time_id,
+					ProductPrice:this.ProductPrice,
+					product_type:this.product_type
 				}
 			});
 		},
@@ -349,6 +358,7 @@ export default {
 	line-height: 52px;
 	width: 100%;
 	background-color: #fff;
+	    z-index: 1;
 }
 .login-form-button {
 	position: relative;
@@ -361,5 +371,8 @@ export default {
 	height: 40px;
 	font-size: 18px;
 	/*font-weight: 600;*/
+}
+.ant-radio-button-wrapper {
+	margin:0 8px;
 }
 </style>

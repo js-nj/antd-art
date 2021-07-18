@@ -19,4 +19,6 @@ export default {
 	OfficeList: rootPath + '/WebService.asmx/OfficeList',
 
 	ProductPrice: rootPath + '/WebService.asmx/ProductPrice',
+	CMSList: rootPath + '/WebService.asmx/CMSList',
+	CMSDetails: rootPath + '/WebService.asmx/CMSDetails',
 }

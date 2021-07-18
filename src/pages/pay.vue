@@ -13,9 +13,21 @@
 				<a-col :span="6" style="text-align:left;">课程名称</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_name }}</a-col>
 			</a-row>
-			<a-row style="margin-bottom:12px;">
+			<a-row style="margin-bottom:12px;" v-if="this.product_type == '1'">
 				<a-col :span="6" style="text-align:left;">课程老师</a-col>
 				<a-col :span="18" style="text-align:right;color:#666666;">{{ course_teacher }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;" v-if="this.product_type != '1'">
+				<a-col :span="6" style="text-align:left;">课程模式</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ one_name }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;" v-if="this.product_type != '1'">
+				<a-col :span="6" style="text-align:left;">课程等级</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ level_name }}</a-col>
+			</a-row>
+			<a-row style="margin-bottom:12px;" v-if="this.product_type != '1'">
+				<a-col :span="6" style="text-align:left;">课程时长</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">{{ time_name }}</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">课时数</a-col>
@@ -24,18 +36,6 @@
 					<van-stepper v-model="course_count" min="1" max="99" step="1" :default-value="1" @change="onChange"/>
 					<!-- <a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="1" @change="onChange" /> -->
 				</a-col>
-			</a-row>
-			<a-row style="margin-bottom:12px;">
-				<a-col :span="6" style="text-align:left;">一对几</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">{{ one_name }}</a-col>
-			</a-row>
-			<a-row style="margin-bottom:12px;">
-				<a-col :span="6" style="text-align:left;">难度</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">{{ level_name }}</a-col>
-			</a-row>
-			<a-row style="margin-bottom:12px;">
-				<a-col :span="6" style="text-align:left;">时长</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">{{ time_name }}</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">课程单价</a-col>
@@ -74,10 +74,14 @@ export default {
 			this.order_num = routeParam.order_num;
 			this.teacher_id = routeParam.teacher_id;
 
+			this.one_id = routeParam.one_id;
+			this.level_id = routeParam.level_id;
+			this.time_id = routeParam.time_id;
 			this.one_name = routeParam.one_name;
 			this.level_name = routeParam.level_name;
 			this.time_name = routeParam.time_name;
 			this.ProductPrice = routeParam.ProductPrice;
+			this.product_type = routeParam.product_type;
 
 			this.pay_price = this.ProductPrice * this.course_count;
 		}
@@ -95,7 +99,11 @@ export default {
 			one_name:'',
 			level_name:'',
 			time_name:'',
-			ProductPrice:''
+			one_id:'',
+			level_id:'',
+			time_id:'',
+			ProductPrice:'',
+			product_type:''
 		};
 	},
 	methods: {
@@ -116,6 +124,9 @@ export default {
 				user_name: '', //	string	收货人
 				user_phone: '', //	number	收货电话
 				user_address: '', //	string	收货地址
+				one_id:this.one_id,//	string	1对几ID
+				level_id:this.level_id,//	number	难度ID
+				time_id:this.time_id,//
 				products: [{
 					product_id: this.course_id, //	string	产品ID
 					product_price: this.course_price, //	string	产品单价
