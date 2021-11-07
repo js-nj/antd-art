@@ -33,13 +33,13 @@
 				<a-col :span="6" style="text-align:left;">课时数</a-col>
 				<!-- <a-col :span="18" style="text-align:right;color:#666666;">{{ course_count }}</a-col> -->
 				<a-col :span="18" style="text-align:right;color:#666666;">
-					<van-stepper v-model="course_count" min="1" max="99" step="1" :default-value="1" @change="onChange"/>
+					<van-stepper v-model="course_count" min="1" max="999" step="1" :default-value="1" @change="onChange"/>
 					<!-- <a-input-number id="inputNumber" v-model="course_count" :min="1" :max="99" step="1" :defaultValue="1" @change="onChange" /> -->
 				</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">课程单价</a-col>
-				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ course_price }}/节</a-col>
+				<a-col :span="18" style="text-align:right;color:#666666;">￥{{ ProductPrice }}/节</a-col>
 			</a-row>
 			<a-row style="margin-bottom:12px;">
 				<a-col :span="6" style="text-align:left;">订单金额</a-col>
@@ -68,7 +68,7 @@ export default {
 			}else {
 				this.course_count = routeParam.count;
 			}
-			this.course_price = routeParam.ProductPrice;
+			// this.course_price = routeParam.ProductPrice;
 			// this.course_totalprice = routeParam.totalprice;
 			this.course_id = routeParam.product_id;
 			this.order_num = routeParam.order_num;
@@ -80,7 +80,7 @@ export default {
 			this.one_name = routeParam.one_name;
 			this.level_name = routeParam.level_name;
 			this.time_name = routeParam.time_name;
-			this.ProductPrice = routeParam.ProductPrice;
+			this.ProductPrice = routeParam.product_type != '1'?routeParam.ProductPrice:routeParam.price;
 			this.product_type = routeParam.product_type;
 
 			this.pay_price = this.ProductPrice * this.course_count;
@@ -108,7 +108,7 @@ export default {
 	},
 	methods: {
 		onChange() {
-			this.pay_price = (this.course_price * this.course_count).toFixed(2);
+			this.pay_price = (this.ProductPrice * this.course_count).toFixed(2);
 	    },
 		submitPay() {
 			var that = this;
@@ -129,7 +129,7 @@ export default {
 				time_id:this.time_id,//
 				products: [{
 					product_id: this.course_id, //	string	产品ID
-					product_price: this.course_price, //	string	产品单价
+					product_price: this.ProductPrice, //	string	产品单价
 					product_count: this.course_count, //	number	课时数
 					product_name: this.course_name //	string	产品名称
 				}]

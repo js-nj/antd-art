@@ -31,8 +31,8 @@
 					</div>
 		  		</div>
 		  		<div style="border-top:solid 1px #d8d8d8;padding-top: 8px;">
-			  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">品牌介绍</div>
-			  		<div style="padding-top: 12px;">
+			  		<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">机构介绍</div>
+			  		<div style="padding: 12px 0;">
 						<img :src="img" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
 						<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
 							<div class="van-multi-ellipsis--l3" style="color: #999;">{{this.des}}</div>
@@ -44,7 +44,7 @@
 		  			<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">课程推荐</div>
 			  		<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
 						<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in home_recourse_list" :key="item.id" @click="gotoCourse(item)">
-							<div class="gutter-box">
+							<div class="gutter-box" style="width: 97%;">
 								<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
 								<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
 								<div style="overflow: auto;text-align: left;">
@@ -59,7 +59,7 @@
 		  			<div style="font-size: 18px;font-family: PingFangSC-Medium, PingFang SC;font-weight: 500;color: #000000;">陪练课程</div>
 			  		<a-row :gutter="0" style="padding: 8px 8px;background: #fff;">
 						<a-col style="margin-top:4px;" class="gutter-row" :span="12" v-for="item in home_plcourse_list" :key="item.id" @click="gotoCourse(item)">
-							<div class="gutter-box">
+							<div class="gutter-box" style="width: 97%;">
 								<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;padding: 0 2px;" :src="item.product_img_url" />
 								<div style="padding: 8px 0;text-align: left;">{{ item.product_name }}</div>
 								<div style="overflow: auto;text-align: left;">
@@ -191,12 +191,12 @@ export default {
 			});
 		},
 		gotoViewTeacher(item){
-			this.$router.push({
-				path: '/teacher',
-				query: {
-					id: item.id
-				}
-			});
+			// this.$router.push({
+			// 	path: '/teacher',
+			// 	query: {
+			// 		id: item.id
+			// 	}
+			// });
 		},
 		getOrg(){
 			var tmpParam = {
@@ -215,6 +215,7 @@ export default {
 				this.rate = data.data.evaluate_point;
 				this.course = data.data.lesson_count;
 				this.students = data.data.student_count;
+				this.teacher_list = data.data.teacher_list;
 				this.visit_count = data.data.visit_count;
 				this.cat = data.data.cat_list;
 				this.cat[0].select = true;
@@ -302,7 +303,7 @@ export default {
 			this.office_id = routeParam.id;
 		}
 		this.getOrg();
-		this.getOrgTeacher();
+		// this.getOrgTeacher();
 		this.getOrgCourse();
 	}
 }

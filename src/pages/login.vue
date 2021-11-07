@@ -16,7 +16,7 @@
 				<a-input :maxLength="maxLength" v-decorator="['password', { rules: [{ required: true, message: '请输入验证码!' }] }]" type="text" placeholder="请输入验证码" ></a-input>
 				<span class="art-code" @click="getCheckCode">{{ checkCodeContent }}</span>
 			</a-form-item>
-			<a-form-item><a-input v-decorator="['recommandcode']" type="text" placeholder="请输入推荐码(选填)"></a-input></a-form-item>
+			<a-form-item><a-input v-decorator="['recommandcode']" type="text" placeholder="请输入机构码(选填)"></a-input></a-form-item>
 			<a-form-item><a-button type="primary" html-type="submit" class="login-form-button">登&nbsp;&nbsp;&nbsp;&nbsp;录</a-button></a-form-item>
 			<!-- <a-form-item style="position: absolute;bottom:0;left: 125px;margin-bottom:0;">
 				<div>
@@ -112,6 +112,8 @@ export default {
 						// }
 					} else {
 						localStorage.open_id = data.list[0].open_id;
+						localStorage.wx_name = data.list[0].wx_name;
+						localStorage.wx_avatar = data.list[0].wx_avatar;
 					}
 				})
 				.catch(error => {
@@ -129,7 +131,9 @@ export default {
 						user_phone: values.userName, //	string	*用户手机号
 						user_type: '1', //	string	*用户类型1学生，0老师
 						sms_code: values.password, //	string	*手机验证码
-						open_id: localStorage.open_id //
+						open_id: localStorage.open_id, //
+						wx_name:window._userInfo?window._userInfo.wx_name:localStorage.wx_name,
+						wx_avatar:window._userInfo?window._userInfo.wx_avatar:localStorage.wx_avatar,
 					};
 					this.$axios({
 						method: 'get',

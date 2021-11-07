@@ -85,6 +85,19 @@
 				</a-list-item>
 			</a-list>
 		  </van-tab>
+		  <van-tab title="商品">
+		  	<div style="margin-top: 12px;">
+		  		<img :src="nodata" style="width:180px;display:block;margin:0 auto;margin-top:50px;" />
+		  		<!-- <div v-for="item in teacher_list" style="border-bottom: 1px solid #EEEEEE;background:#fff;padding:12px 6px;">
+					<img :src="item.user_avatar" style="width:44px;height:44px;display:inline-block;border-radius:22px;vertical-align:top;">
+					<div style="padding-left:20px;display:inline-block;width:200px;text-align:left;height:44px;line-height:44px;">
+						<div style="font-size:16px;line-height:22px;">{{item.user_name}}</div>
+						<div style="font-size:14px;color:#999;line-height:22px;">{{item.user_info}}</div>
+					</div>
+					<van-button type="default" size="small" round style="width:60px;height:20px;vertical-align:top;position: relative;top: 10px;" @click="gotoViewTeacher(item)">查看</van-button>
+				</div> -->
+		  	</div>
+		  </van-tab>
 		</van-tabs>
 	</div>
 </template>
@@ -131,6 +144,7 @@ export default {
 			spareData: [],
 			page: 1,
 			category_id:'',
+			nodata:require('../assets/nodata.png'),
 			allLoaded:false
 		}
 	},

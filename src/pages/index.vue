@@ -37,7 +37,7 @@
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
 						<a-row :gutter="0">
 							<a-col class="gutter-row" :span="12" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)">
-								<div class="gutter-box">
+								<div class="gutter-box" style="width: 95%;">
 									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.office_img_url" />
 									<div style="padding: 8px 0;">{{ item.office_name }}</div>
 									<div style="overflow: auto;">
@@ -418,7 +418,9 @@ export default {
 				params: { request_content: JSON.stringify(param) }
 			}).then(res => {
 				let data = res.data;
-				console.log('data', data);
+				console.log('-getHomeData-data.code', data.code);
+				console.log('-getHomeData-data', data);
+				console.log('-getHomeData-data-json', JSON.parse(data))
 				if (data.code === '0') {
 					this.home_ad_list = data.data.ad_list;
 					this.home_course_recommend_list = data.data.course_recommend_list;
@@ -449,7 +451,7 @@ export default {
 				params: { request_content: JSON.stringify(param) }
 			}).then(res => {
 				let data = res.data;
-				console.log('data', data);
+				console.log('getMainData-data.code', data.code);
 				if (data.code === '0') {
 					this.ad_list = data.data.ad_list;
 					this.course_recommend_list = data.data.course_recommend_list;

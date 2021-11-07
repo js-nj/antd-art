@@ -13,7 +13,7 @@
 					<div class="c-item-subB">
 						<span>{{ course_personNum }}人参加</span>
 						<label class="label">￥
-							<i>{{ ProductPrice }}</i>
+							<i>{{ this.product_type != '1'?ProductPrice:course_price }}</i>
 							/节起
 						</label>
 					</div>
@@ -42,7 +42,7 @@
 				</div>
 				<div class="c-item-b" v-if="this.product_type == '1'">
 					<h5 class="c-item-subT">课程大纲</h5>
-					<div class="c-item-subB">{{ course_introduction }}</div>
+					<div class="c-item-subB">{{ course_syllabus }}</div>
 				</div>
 				<div class="c-item-b" v-if="this.product_type != '1' && this.one_idDic.length>0">
 					<h5 class="c-item-subT">1对几</h5>
@@ -246,8 +246,8 @@ export default {
 					this.course_teacher = data.data.teacher_name;
 					this.teacher_id = data.data.teacher_id;
 					this.course_teacher_img = data.data.teacher_img_url;
-					this.course_introduction = data.data.product_desc;
-					this.course_syllabus = data.data.product_info;
+					this.course_introduction = data.data.product_info;
+					this.course_syllabus = data.data.product_desc;
 					this.course_img = data.data.product_img_url;
 					this.course_video = data.data.product_video_url;
 					this.course_count = data.data.product_count;
@@ -374,5 +374,11 @@ export default {
 }
 .ant-radio-button-wrapper {
 	margin:0 8px;
+}
+.course >>> .ant-radio-button-wrapper:last-child {
+    border-radius: 0;
+}
+.course >>> .ant-radio-button-wrapper:first-child {
+    border-radius: 0;
 }
 </style>
