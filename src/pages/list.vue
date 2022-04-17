@@ -14,11 +14,11 @@
 							{{item.office_info}}
 						</div>
 						<!-- <div style="color:#B7BAC5;overflow: auto;font-size: 12px;">
-							<span>学生数量：{{item.student_count}}</span>
+							<span>学员数量：{{item.student_count}}</span>
 							<span v-html="'\u00a0\u00a0\u00a0\u00a0'"></span>
-							<span>教师数量：{{ item.teacher_count }}</span>
+							<span>老师数量：{{ item.teacher_count }}</span>
 							
-							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">教师数量{{ item.teacher_count }}</i> 
+							<i style="font-style: normal;float:right;color:#E96525;font-size: 14px;">老师数量{{ item.teacher_count }}</i> 
 						</div> -->
 					</div>
 					<a-avatar shape="square" :size="124" style="height:72px;" slot="avatar" :src="item.img_url" />
@@ -110,7 +110,7 @@ export default {
 				limit: 10, //	int	*页面大小
 				// token: window._userInfo.token, //	*用户token
 				user_id: window._userInfo.id, //	string	*用户ID
-				// user_type:'0',//	string	*1学生，0老师
+				// user_type:'0',//	string	*1学员，0老师
 				category_id:this.category_id,//	string	类别ID
 				keywords:this.keywords,//	string	商品名称搜素关键词
 			};

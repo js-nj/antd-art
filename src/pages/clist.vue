@@ -107,11 +107,11 @@ export default {
 				limit: 10, //	int	*页面大小
 				token: window._userInfo.token, //	*用户token
 				user_id: window._userInfo.id, //	string	*用户ID
-				user_type:'0',//	string	*1学生，0老师
+				user_type:'0',//	string	*1学员，0老师
 				category_id:this.category_id,//	string	类别ID
 				course_level:'',//	string	课程难度，1-5级，入门，初级，中级，高级，特级
 				// order_type:'1',//	string	排序类型，1综合2销售3上新4好评5价格高到低6价格低到高
-				teacher_id:'',//	string	教师ID
+				teacher_id:'',//	string	老师ID
 				keywords:this.keywords,//	string	商品名称搜素关键词
 				product_status:'',//
 				lesson_type: '2'

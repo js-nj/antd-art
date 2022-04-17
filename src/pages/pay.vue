@@ -117,7 +117,7 @@ export default {
 				user_id: window._userInfo.id,
 				user_type: '1', //	string	用户类型
 				token: window._userInfo.token, //	string	用户token
-				teacher_id: this.teacher_id, //	string	教师ID
+				teacher_id: this.teacher_id, //	string	老师ID
 				pay_type: '1', //	string	1微信2支付宝
 				order_money: this.pay_price, //	number	订单金额
 				order_remarks: '', //	string	订单备注
@@ -134,6 +134,11 @@ export default {
 					product_name: this.course_name //	string	产品名称
 				}]
 			};
+			//检查课时数不能小于标准课时数
+			if(Number(this.$route.query.count)>this.course_count){
+				this.$message.error('购买课时数不能小于'+Number(this.$route.query.count));
+				return;
+			}
 			this.$axios({
 				method: 'get',
 				url: Api.OrderAdd,

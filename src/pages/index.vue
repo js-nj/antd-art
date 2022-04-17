@@ -1,23 +1,35 @@
 <template>
-	<div v-show="allready" :style="{ paddingTop: paddingTop }">
+	<div v-show="allready" :style="{ paddingTop: paddingTop,background: '#F6F9FF' }">
 		<a-tabs default-active-key="1" tabPosition="bottom" @change="onChange" style="width: 100%;bottom: 0px;">
 			<a-tab-pane key="1">
 				<span slot="tab">
 					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="indeximg" />
 					<span style="font-size: 12px;">主页</span>
 				</span>
-				<div :style="{ padding: '0px 16px', overflow: 'auto', height: cHeight }">
+				<div :style="{ padding: '0px 0px', overflow: 'auto', height: cHeight , position:'relative'}">
+					<img style="width:100%;position:absolute;top:0;left:0;" :src="headbg" />
+					<van-search v-model="searchKey" placeholder="请输入搜索关键词" />
 					<a-carousel autoplay>
-						<div v-for="item in home_ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
+						<div v-for="item in home_ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:140px;border-radius:8px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<a-row class="category-list" :gutter="0" style="padding-top: 24px;">
+
+					<a-row class="category-list" :gutter="0" style="padding: 16px 16px 0 16px;background:#fff;margin-top:8px;border-radius: 8px;">
+						<a-col class="gutter-row" :span="6" v-for="item in home_type" :key="item.id" @click="gotoList(item)">
+							<div class="gutter-box">
+								<img style="width:50px;height:50px;display: inline-block;border-radius: 4px;" :src="item.img" />
+								<div style="padding: 4px 0;font-size: 12px;">{{ item.name }}</div>
+							</div>
+						</a-col>
+					</a-row>
+
+					<!-- <a-row class="category-list" :gutter="0" style="padding-top: 24px;">
 						<a-col class="gutter-row" :span="4" v-for="item in category_list" :key="item.id" @click="gotoList(item)">
 							<div class="gutter-box">
 								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
 								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
 							</div>
 						</a-col>
-					</a-row>
+					</a-row> -->
 					<!-- <div class="art-recmmand" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">最新推荐</h5>
 						<a-row :gutter="0">
@@ -33,23 +45,30 @@
 							</a-col>
 						</a-row>
 					</div> -->
-					<div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
-						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
+					<!-- <div class="art-recmmand-org" style="text-align: left;padding: 16px 16px;">
+						<h5 style="color:#333;font-size: 16px;padding: 0px 0px 8px;font-weight: 500;">
+							<img class="img-icon" :src="jgicon" />
+							机构信息
+						</h5>
 						<a-row :gutter="0">
-							<a-col class="gutter-row" :span="12" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)">
-								<div class="gutter-box" style="width: 95%;">
-									<img style="width:100%;height:100px;display: inline-block;border-radius: 4px;" :src="item.office_img_url" />
-									<div style="padding: 8px 0;">{{ item.office_name }}</div>
-									<div style="overflow: auto;">
-										<div class="van-multi-ellipsis--l2" style="color:#BBB;font-size: 10px;">{{ item.office_info }}</div>
-										<!-- <label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label> -->
+							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)">
+								<div class="gutter-box" style="">
+									<img style="width:100%;height:227px;display: inline-block;" :src="item.office_img_url" />
+									<div style="background: #F3F8FF;padding: 4px 12px;">
+										<div style="">{{ item.office_name }}</div>
+										<div style="overflow: auto;">
+											<div class="van-multi-ellipsis--l2" style="color:#BBB;font-size: 10px;">{{ item.office_info }}</div>
+										</div>
 									</div>
 								</div>
 							</a-col>
 						</a-row>
-					</div>
+					</div> -->
 					<div class="art-recmmand-org" style="text-align: left;padding-top: 8px;">
-						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">学艺资讯</h5>
+						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">
+							<img class="img-icon" :src="zxicon" />
+							学艺资讯
+						</h5>
 						<van-list
 						  v-model="loading"
 						  :finished="finished"
@@ -58,17 +77,18 @@
 						>
 							<div class="wy-news-items">
 		                      <div class="wy-news-item" v-for="item in list" @click="gotoDetail(item)">
+		                        <div class="wy-news-item-img">
+		                          <img :src="item.cms_img_url" />
+		                        </div>
 		                        <div class="wy-news-item-body">
 		                          <div class="wy-news-item-title van-multi-ellipsis--l2">{{htmlDecodeByRegEx(item.cms_title)}}</div>
 		                          <div class="wy-news-item-des">
 		                            <!-- <div class="van-ellipsis">{{htmlDecodeByRegEx(item.cms_content)}}</div> -->
 		                            <span class="">{{item.create_time}}</span>
-		                            <span class="wy-news-item-read">{{item.hits+'人阅读'}}</span>
+		                            <!-- <span class="wy-news-item-read">{{item.hits+'人阅读'}}</span> -->
 		                          </div>
 		                        </div>
-		                        <div class="wy-news-item-img">
-		                          <img :src="item.cms_img_url" />
-		                        </div>
+		                        
 		                      </div>
 		                    </div>
 						  <!-- <van-cell v-for="item in list" :key="item" :title="item" /> -->
@@ -76,7 +96,7 @@
 					</div>
 				</div>
 			</a-tab-pane>
-			<a-tab-pane key="2">
+			<!-- <a-tab-pane key="2">
 				<span slot="tab">
 					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="plimg" />
 					<span style="font-size: 12px;">陪练</span>
@@ -85,14 +105,6 @@
 					<a-carousel autoplay>
 						<div v-for="item in ad_list" :key="item.rownumber" @click="handleAd(item)"><img style="width: 100%;height:160px;" :src="item.pic_url" /></div>
 					</a-carousel>
-					<!-- <a-row class="category-list" :gutter="0" style="padding-top: 24px;">
-						<a-col class="gutter-row" :span="4" v-for="item in category_list" :key="item.id" @click="gotocList(item)">
-							<div class="gutter-box">
-								<img style="width:52px;height:52px;display: inline-block;border-radius: 4px;" :src="item.category_img" />
-								<div style="padding: 4px 0;font-size: 12px;">{{ item.category_name }}</div>
-							</div>
-						</a-col>
-					</a-row> -->
 					<div class="art-recmmand" style="text-align: left;padding-top: 16px;">
 						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">陪练推荐</h5>
 						<a-row :gutter="0">
@@ -102,29 +114,13 @@
 									<div style="padding: 8px 0;">{{ item.product_name }}</div>
 									<div style="overflow: auto;">
 										<label style="color:#E96525;">￥{{ item.product_price }}/节</label>
-										<!-- <span style="color:#BBB;font-size: 10px;">{{ item.product_teacher }}</span>
-										<label style="float:right;color:#E96525;">￥{{ item.product_price }}/节</label> -->
 									</div>
 								</div>
 							</a-col>
 						</a-row>
 					</div>
-					<!-- <div class="art-recmmand-org" style="text-align: left;padding-top: 16px;">
-						<h5 style="color:#333;font-size: 16px;padding: 8px 4px;font-weight: 500;">机构推荐</h5>
-						<a-row :gutter="0">
-							<a-col class="gutter-row" :span="24" v-for="(item,sindex) in org_recommend_list" :key="sindex" @click="gotoOrg(item)" style="padding: 12px 0;">
-								<div>
-									<img :src="item.office_img_url" style="width:74px;height:74px;display:inline-block;border-radius:36px;vertical-align: top;">
-									<div style="padding-left:20px;display:inline-block;width: calc(100% - 85px);text-align: left;position:relative;top:4px;">
-										<div>{{item.office_name}}</div>
-										<div class="van-multi-ellipsis--l2" style="color: #999;">{{item.office_info}}</div>
-									</div>
-								</div>
-							</a-col>
-						</a-row>
-					</div> -->
 				</div>
-			</a-tab-pane>
+			</a-tab-pane> -->
 			<a-tab-pane key="3">
 				<span slot="tab">
 					<img style="width: 20px;height:20px;display: block;margin:0 auto;" :src="wdimg" />
@@ -135,6 +131,8 @@
 						<img style="" :src="user_avatar" />
 						<span class="name">{{ user_name }}</span>
 						<br />
+						<span class="name" style="top:73px;font-size:12px;">{{ office_name }}</span>
+						<br />
 						<span class="money">余额:{{ sumMoney }}</span>
 					</div>
 					<div class="my-menus">
@@ -143,7 +141,7 @@
 							<span>我的订单</span>
 							<a-icon class="my-arrow-right" type="right" />
 						</div>
-						<div class="my-menu" @click="chongzhi">
+						<!-- <div class="my-menu" @click="chongzhi">
 							<a-icon type="bars" />
 							<span>充值</span>
 						</div>
@@ -151,7 +149,7 @@
 							<a-icon type="bars" />
 							<span>充值记录</span>
 							<a-icon class="my-arrow-right" type="right" />
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</a-tab-pane>
@@ -163,18 +161,20 @@
 import Api from '../api/api.js';
 import { MessageBox } from 'bh-mint-ui2';
 import 'bh-mint-ui2/lib/style.css';
-import { List } from 'vant';
+import { List,Search } from 'vant';
 import 'vant/lib/list/style';
 export default {
 	components: {
 		MessageBox,
 		[List.name]: List,
+		[Search.name]: Search,
 	},
 	data() {
 		return {
 			tabPosition: 'bottom',
 			user_avatar: '',
 			user_name: '',
+			office_name:'',
 			home_course_recommend_list: [],
 			home_org_recommend_list:[],
 			home_ad_list: [],
@@ -190,12 +190,41 @@ export default {
 			indeximg:require('../assets/ic_home_selected.png'),
 			plimg: require('../assets/ic_pl_un_selected.png'),
 			wdimg: require('../assets/ic_mine_un_selected.png'),
+			headbg:require('../assets/headbg.png'),
+			jgicon:require('../assets/jg.png'),
+			zxicon:require('../assets/zx.png'),
 			list: [],
 		    loading: false,
 		    finished: false,
 		    listTotal:20,
 		    page:0,
-		    limitPage:0
+		    limitPage:0,
+		    searchKey:'',
+		    home_type:[{
+		    	img:require('../assets/i-jgjs.png'),
+		    	name:'机构介绍'
+		    },{
+		    	img:require('../assets/i-msfc.png'),
+		    	name:'名师风采'
+		    },{
+		    	img:require('../assets/i-tjkc.png'),
+		    	name:'推荐课程'
+		    },{
+		    	img:require('../assets/i-plkc.png'),
+		    	name:'陪练课程'
+		    },{
+		    	img:require('../assets/i-ytyx.png'),
+		    	name:'云途影像'
+		    },{
+		    	img:require('../assets/i-sbcs.png'),
+		    	name:'设备测试'
+		    },{
+		    	img:require('../assets/i-ksrm.png'),
+		    	name:'快速入门'
+		    },{
+		    	img:require('../assets/i-spzs.png'),
+		    	name:'商品展示'
+		    }]
 		};
 	},
 	created() {
@@ -222,6 +251,7 @@ export default {
 			window._userInfo = JSON.parse(localStorage.getItem('userInfo'));
 			this.user_avatar = window._userInfo.user_avatar ? window._userInfo.user_avatar : require('../assets/head.jpg');
 			this.user_name = window._userInfo.user_name ? window._userInfo.user_name : window._userInfo.user_phone;
+			this.office_name = window._userInfo.office_name;
 			this.sumMoney = window._userInfo.apple_balance || '0.00';
 			this.getHomeData();
 			this.getMainData();
@@ -414,13 +444,13 @@ export default {
 			};
 			this.$axios({
 				method: 'get',
-				url: Api.StudentIndexGet,
+				url: Api.StudentIndexNew,
 				params: { request_content: JSON.stringify(param) }
 			}).then(res => {
 				let data = res.data;
-				console.log('-getHomeData-data.code', data.code);
-				console.log('-getHomeData-data', data);
-				console.log('-getHomeData-data-json', JSON.parse(data))
+				// console.log('-getHomeData-data.code', data.code);
+				// console.log('-getHomeData-data', data);
+				// console.log('-getHomeData-data-json', JSON.parse(data))
 				if (data.code === '0') {
 					this.home_ad_list = data.data.ad_list;
 					this.home_course_recommend_list = data.data.course_recommend_list;
@@ -447,7 +477,7 @@ export default {
 			};
 			this.$axios({
 				method: 'get',
-				url: Api.StudentIndexGet,
+				url: Api.StudentIndexNew,
 				params: { request_content: JSON.stringify(param) }
 			}).then(res => {
 				let data = res.data;
@@ -512,13 +542,28 @@ export default {
 </script>
 
 <style scoped>
+.van-search {
+	padding: 10px 16px
+}
+.van-search__content {
+	padding-left: 0px;
+
+}
+.van-search .van-cell {
+	background-color: #fff;
+	border-radius: 16px;
+	padding-left: 12px;
+}
 .ant-tabs /deep/ .ant-tabs-bottom-bar {
 	margin-top: 0;
 }
+.ant-carousel {
+	padding: 6px 16px 0 16px;
+}
 .ant-carousel >>> .slick-slide {
 	text-align: center;
-	height: 160px;
-	line-height: 160px;
+	height: 140px;
+	line-height: 140px;
 	background: #364d79;
 	overflow: hidden;
 }
@@ -530,12 +575,22 @@ export default {
 	min-height: 185px;
 }
 .category-list .gutter-row{
-	width:20%;
+	/*width:25%;*/
+}
+.art-recmmand-org {
+	text-align: left;
+    margin: 12px 0;
+    padding: 4px 16px;
+    background: #fff;
+    border-radius: 16px;
 }
 .art-recmmand-org .gutter-box {
 	/*max-height: 100px;*/
 	width:100%;
 	margin: 0 auto;
+}
+.art-recmmand-org .gutter-box img{
+	/*height:227px;*/
 }
 .art-recmmand .gutter-box {
 	width: 95%;
@@ -566,7 +621,7 @@ export default {
 .my-head .money {
 	font-size: 16px;
 	position: absolute;
-	top: 80px;
+	top: 90px;
 	left: 122px;
 }
 .my-menus {
@@ -599,6 +654,7 @@ export default {
 }
 .ant-tabs /deep/ .ant-tabs-nav {
 	width: 100%;
+	background: #fff;
 }
 .ant-tabs /deep/ .ant-tabs-nav > div {
 	width: 100%;
@@ -613,8 +669,12 @@ export default {
 }
 
 
-
-
+.img-icon {
+	width: 20px;
+    height: 20px;
+    position: relative;
+    top: -3px;
+}
 
 
 
@@ -626,14 +686,17 @@ export default {
       overflow: auto;
 }
 .wy-news-item{
-  padding: 12px 0;
-      border-top: solid 1px #F7F7F7;
+	margin-top: 8px;
+  padding: 12px 6px;
+      /*border-top: solid 1px #F7F7F7;*/
       position: relative;
+      background: #F3F8FF;
+border-radius: 6px;
 }
-.wy-news-item-body {
+/*.wy-news-item-body {
   width: calc(100% - 104px);
-      padding-left: 8px;
-}
+      padding-right: 8px;
+}*/
 .wy-news-item-body,.wy-news-item-img {
   display: inline-block;
   vertical-align: top;
@@ -641,12 +704,14 @@ export default {
 .wy-news-item-img {
   /*width: 100px;*/
   line-height: 1;
+  border-radius: 4px;
   /*padding-top: 4px;*/
 }
 .wy-news-item-body {
   width: calc(100% - 101px);
   /*width: calc(100% - 105px);*/
     text-align: left;
+    padding-left: 8px;
 }
 .wy-news-item-title {
   padding: 0 0 4px 0;

@@ -129,7 +129,7 @@ export default {
 					let param = {
 						from_user_code: values.recommandcode, //	string	推荐码
 						user_phone: values.userName, //	string	*用户手机号
-						user_type: '1', //	string	*用户类型1学生，0老师
+						user_type: '1', //	string	*用户类型1学员，0老师
 						sms_code: values.password, //	string	*手机验证码
 						open_id: localStorage.open_id, //
 						wx_name:window._userInfo?window._userInfo.wx_name:localStorage.wx_name,
